@@ -1,6 +1,6 @@
 #include <doctest/doctest.h>
-#include <greeter/greeter.h>
 #include <geeks4geeks/version.h>
+#include <greeter/greeter.h>
 
 #include <string>
 
