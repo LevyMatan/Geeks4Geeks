@@ -5,7 +5,7 @@
 namespace greeter {
 
   /**  Language codes to be used with the Greeter class */
-  enum class LanguageCode { EN, DE, ES, FR, HEB};
+  enum class LanguageCode { EN, DE, ES, FR, HEB };
 
   /**
    * @brief A class for saying hello in multiple languages
