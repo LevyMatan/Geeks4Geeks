@@ -9,7 +9,7 @@ namespace shenyrash_and_his_bits
     int count_set_bits_in_number(long long x)
     {
         int count_set_bits = 0;
-        for (size_t i = 0; i < 64; i++)
+        for (int i = 0; i < 64; i++)
         {
             if(x & 1ULL)
             {
