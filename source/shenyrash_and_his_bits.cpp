@@ -75,7 +75,7 @@ namespace shenyrash_and_his_bits
         long long max_idx = 0; /// Keep the Left Most Bit SET in x.
         for(long long idx = 63; idx >= 0; idx--)
         {
-            if(x & (1UL << idx))
+            if(x & (1ULL << idx))
             {
                 if(idx > max_idx)
                 {
@@ -122,7 +122,7 @@ namespace shenyrash_and_his_bits
         long long count_permutations = 0; /// count the number of numbers lower than x.
         for(long long idx = 63; idx > 0; idx--)
         {
-            if(x & (1UL << idx))
+            if(x & (1ULL << idx))
             {
                 // With bit OFF
                 // printf("x had bit %lld on, there are %d bits to toggle\n", idx, count);
