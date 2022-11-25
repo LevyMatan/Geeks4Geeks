@@ -71,8 +71,8 @@ namespace shenyrash_and_his_bits
 
         // First we need to count the number of bits in x
         // This is a O(1) operation
-        int count = 0; /// count the number of bits SET in x.
-        int max_idx = 0; /// Keep the Left Most Bit SET in x.
+        long long count = 0; /// count the number of bits SET in x.
+        long long max_idx = 0; /// Keep the Left Most Bit SET in x.
         for(long long idx = 63; idx >= 0; idx--)
         {
             if(x & (1UL << idx))
@@ -95,9 +95,9 @@ namespace shenyrash_and_his_bits
          *
          */
         std::vector<std::vector<long long>> n_choose_k(max_idx+1, std::vector<long long>(max_idx+1, 0));
-        for(int n = 1; n < max_idx+1; n++)
+        for(long long n = 1; n < max_idx+1; n++)
         {
-            for(int k = 0; k <= n; k++)
+            for(long long k = 0; k <= n; k++)
             {
                 if(k == 0)
                 {
