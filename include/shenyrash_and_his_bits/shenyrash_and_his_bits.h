@@ -55,4 +55,4 @@ namespace shenyrash_and_his_bits {
      */
     long long count(long long x);
 
-}   // namespace shenyrash_and_his_bits
+}  // namespace shenyrash_and_his_bits

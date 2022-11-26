@@ -5,19 +5,19 @@
 #include <string>
 
 TEST_CASE("Greeter") {
-  using namespace greeter;
+    using namespace greeter;
 
-  Greeter greeter("Tests");
+    Greeter greeter("Tests");
 
-  MESSAGE("This a little more info on the test");
-  CHECK(greeter.greet(LanguageCode::EN) == "Hello, Tests!");
-  CHECK(greeter.greet(LanguageCode::DE) == "Hallo Tests!");
-  CHECK(greeter.greet(LanguageCode::ES) == "¡Hola Tests!");
-  CHECK(greeter.greet(LanguageCode::FR) == "Bonjour Tests!");
-  CHECK(greeter.greet(LanguageCode::HEB) == "Shalom Tests!");
+    MESSAGE("This a little more info on the test");
+    CHECK(greeter.greet(LanguageCode::EN) == "Hello, Tests!");
+    CHECK(greeter.greet(LanguageCode::DE) == "Hallo Tests!");
+    CHECK(greeter.greet(LanguageCode::ES) == "¡Hola Tests!");
+    CHECK(greeter.greet(LanguageCode::FR) == "Bonjour Tests!");
+    CHECK(greeter.greet(LanguageCode::HEB) == "Shalom Tests!");
 }
 
 TEST_CASE("Greeter version") {
-  static_assert(std::string_view(GEEKS4GEEKS_VERSION) == std::string_view("1.0"));
-  CHECK(std::string(GEEKS4GEEKS_VERSION) == std::string("1.0"));
+    static_assert(std::string_view(GEEKS4GEEKS_VERSION) == std::string_view("1.0"));
+    CHECK(std::string(GEEKS4GEEKS_VERSION) == std::string("1.0"));
 }
