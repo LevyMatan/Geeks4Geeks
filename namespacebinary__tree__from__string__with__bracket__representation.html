@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Geeks4Geeks</title>
+  <title>binary_tree_from_string_with_bracket_representation namespace | Geeks4Geeks</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
   <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
   <link rel="icon" href="favicon-dark.png" type="image/png" />
@@ -33,7 +33,7 @@
             <li><a href="namespaces.html">Namespaces</a></li>
           </ol>
           <ol class="m-col-t-6 m-col-m-none" start="3">
-            <li><a href="annotated.html" id="m-navbar-current">Classes</a></li>
+            <li><a href="annotated.html">Classes</a></li>
             <li><a href="files.html">Files</a></li>
             <li class="m-show-m"><a href="#search" class="m-doc-search-icon" title="Search" onclick="return showSearch()"><svg style="height: 0.9rem;" viewBox="0 0 16 16">
               <use href="#m-doc-search-icon-path" />
@@ -48,38 +48,51 @@
   <div class="m-container m-container-inflatable">
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
-        <h1>Classes</h1>
-        <ul class="m-doc">
-          <li class="m-doc-collapsible">
-            <a href="#" onclick="return toggle(this)">namespace</a> <a href="namespacebinary__tree__from__string__with__bracket__representation.html" class="m-doc">binary_tree_from_string_with_bracket_representation</a> <span class="m-doc">Construct Binary Tree from String with bracket representation Construct a binary tree from a string consisting of parenthesis and integers. The whole input represents a binary tree. It contains an integer followed by zero, one or two pairs of parenthesis. The integer represents the roots value and a pair of parenthesis contains a child binary tree with the same structure. Always start to construct the left child node of the parent first if it exists.</span>
-            <ul class="m-doc">
-              <li>class <a href="classbinary__tree__from__string__with__bracket__representation_1_1_node.html" class="m-doc">Node</a> <span class="m-doc"><a href="classbinary__tree__from__string__with__bracket__representation_1_1_node.html" class="m-doc">Node</a> struct for a simple binary tree.</span></li>
-            </ul>
-          </li>
-          <li class="m-doc-collapsible">
-            <a href="#" onclick="return toggle(this)">namespace</a> <a href="namespacegreeter.html" class="m-doc">greeter</a> <span class="m-doc"><span></span></span>
-            <ul class="m-doc">
-              <li>class <a href="classgreeter_1_1_greeter.html" class="m-doc">Greeter</a> <span class="m-doc">A class for saying hello in multiple languages.</span></li>
-            </ul>
-          </li>
-          <li>namespace <a href="namespaceshenyrash__and__his__bits.html" class="m-doc">shenyrash_and_his_bits</a> <span class="m-doc">Shreyansh and his bits.</span></li>
-        </ul>
-        <script>
-        function toggle(e) {
-            e.parentElement.className = e.parentElement.className == 'm-doc-collapsible' ?
-                'm-doc-expansible' : 'm-doc-collapsible';
-            return false;
-        }
-        /* Collapse all nodes marked as such. Doing it via JS instead of
-           directly in markup so disabling it doesn't harm usability. The list
-           is somehow regenerated on every iteration and shrinks as I change
-           the classes. It's not documented anywhere and I'm not sure if this
-           is the same across browsers, so I am going backwards in that list to
-           be sure. */
-        var collapsed = document.getElementsByClassName("collapsed");
-        for(var i = collapsed.length - 1; i >= 0; --i)
-            collapsed[i].className = 'm-doc-expansible';
-        </script>
+        <h1>
+          binary_tree_from_string_with_bracket_representation <span class="m-thin">namespace</span>
+        </h1>
+        <p>Construct Binary Tree from String with bracket representation Construct a binary tree from a string consisting of parenthesis and integers. The whole input represents a binary tree. It contains an integer followed by zero, one or two pairs of parenthesis. The integer represents the roots value and a pair of parenthesis contains a child binary tree with the same structure. Always start to construct the left child node of the parent first if it exists.</p>
+        <nav class="m-block m-default">
+          <h3>Contents</h3>
+          <ul>
+            <li>
+              Reference
+              <ul>
+                <li><a href="#nested-classes">Classes</a></li>
+                <li><a href="#func-members">Functions</a></li>
+              </ul>
+            </li>
+          </ul>
+        </nav>
+<p>Example 1:</p><p>Input: &quot;1(2)(3)&quot; Output: 2 1 3 Explanation: 1 / \ 2 3 Explanation: first pair of parenthesis contains left subtree and second one contains the right subtree. Inorder of above tree is &quot;2 1 3&quot;. Example 2:</p><p>Input: &quot;4(2(3)(1))(6(5))&quot; Output: 3 2 1 4 5 6 Explanation: 4 / \ 2 6 / \ / 3 1 5</p><p>URL: <a href="https://practice.geeksforgeeks.org/problems/construct-binary-tree-from-string-with-bracket-representation/1">https:/<wbr />/<wbr />practice.geeksforgeeks.org/<wbr />problems/<wbr />construct-binary-tree-from-string-with-bracket-representation/<wbr />1</a></p>
+        <section id="nested-classes">
+          <h2><a href="#nested-classes">Classes</a></h2>
+          <dl class="m-doc">
+            <dt>
+              class <a href="classbinary__tree__from__string__with__bracket__representation_1_1_node.html" class="m-doc">Node</a>
+            </dt>
+            <dd><a href="classbinary__tree__from__string__with__bracket__representation_1_1_node.html" class="m-doc">Node</a> struct for a simple binary tree.</dd>
+          </dl>
+        </section>
+        <section id="func-members">
+          <h2><a href="#func-members">Functions</a></h2>
+          <dl class="m-doc">
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a9a36ac4363056611b9fd33cead20a19e" class="m-doc">treeFromString</a>(</span><span class="m-doc-wrap">std::string str) -&gt; <a href="classbinary__tree__from__string__with__bracket__representation_1_1_node.html" class="m-doc">Node</a>*</span>
+            </dt>
+            <dd><span></span></dd>
+          </dl>
+        </section>
+        <section>
+          <h2>Function documentation</h2>
+          <section class="m-doc-details" id="a9a36ac4363056611b9fd33cead20a19e"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><a href="classbinary__tree__from__string__with__bracket__representation_1_1_node.html" class="m-doc">Node</a>* binary_<wbr />tree_<wbr />from_<wbr />string_<wbr />with_<wbr />bracket_<wbr />representation::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a9a36ac4363056611b9fd33cead20a19e" class="m-doc-self">treeFromString</a>(</span><span class="m-doc-wrap">std::string str)</span></span>
+              <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="binary__tree__from__string__with__bracket__representation_8h.html">&lt;binary_tree_from_string_with_bracket_representation/binary_tree_from_string_with_bracket_representation.h&gt;</a></div>
+            </h3>
+            <p><span></span></p>
+          </div></section>
+        </section>
       </div>
     </div>
   </div>
