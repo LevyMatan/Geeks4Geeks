@@ -1,39 +1,46 @@
 name: Bump version
 on:
   workflow_dispatch:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - master
+  push:
+    branches-ignore:
+      - master
 
 jobs:
-  bump-version:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+    - uses: actions/checkout@v3
+      with:
+        ref: ${{ github.event.pull_request.head.sha }}
+        fetch-depth: '0'
 
-      - uses: paulhatch/semantic-version@v4.0.3
-        id: version
-        with:
-          # The prefix to use to identify tags
-          tag_prefix: "v"
-          # A string which, if present in a git commit, indicates that a change represents a
-          # major (breaking) change, supports regular expressions wrapped with '/'
-          major_pattern: "BREAKING CHANGE!"
-          # A string which indicates the flags used by the `major_pattern` regular expression. Supported flags: idgs
-          # major_regexp_flags: ""
-          # Same as above except indicating a minor change, supports regular expressions wrapped with '/'
-          minor_pattern: "feat("
-          # A string which indicates the flags used by the `minor_pattern` regular expression. Supported flags: idgs
-          # minor_regexp_flags: ""
-          # A string to determine the format of the version output
-          format: "${major}.${minor}.${patch}-prerelease${increment}"
-          # Optional path to check for changes. If any changes are detected in the path the
-          # 'changed' output will true. Enter multiple paths separated by spaces.
-          # change_path: "standalone"
-          # Named version, will be used as suffix for name version tag
-          # namespace: standalone
-          # If this is set to true, *every* commit will be treated as a new version.
-          bump_each_commit: true
-          # If true, the body of commits will also be searched for major/minor patterns to determine the version type.
-          search_commit_body: true
-          # The output method used to generate list of users, 'csv' or 'json'.
-          # user_format_type: "csv"
+    - name: Bump version and push tag
+      uses: anothrNick/github-tag-action@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        WITH_V: true
+        MAJOR_STRING_TOKEN: "BREAKING!"
+        MINOR_STRING_TOKEN: "feat("
+        PATCH_STRING_TOKEN: "fix("
+        VERBOSE: true
+# GITHUB_TOKEN (required) - Required for permission to tag the repo.
+# DEFAULT_BUMP (optional) - Which type of bump to use when none explicitly provided (default: minor).
+# WITH_V (optional) - Tag version with v character.
+# RELEASE_BRANCHES (optional) - Comma separated list of branches (bash reg exp accepted) that will generate the release tags. Other branches and pull-requests generate versions postfixed with the commit hash and do not generate any tag. Examples: master or .* or release.*,hotfix.*,master ...
+# CUSTOM_TAG (optional) - Set a custom tag, useful when generating tag based on f.ex FROM image in a docker image. Setting this tag will invalidate any other settings set!
+# SOURCE (optional) - Operate on a relative path under $GITHUB_WORKSPACE.
+# DRY_RUN (optional) - Determine the next version without tagging the branch. The workflow can use the outputs new_tag and tag in subsequent steps. Possible values are true and false (default).
+# INITIAL_VERSION (optional) - Set initial version before bump. Default 0.0.0.
+# TAG_CONTEXT (optional) - Set the context of the previous tag. Possible values are repo (default) or branch.
+# PRERELEASE (optional) - Define if workflow runs in prerelease mode, false by default. Note this will be overwritten if using complex suffix release branches.
+# PRERELEASE_SUFFIX (optional) - Suffix for your prerelease versions, beta by default. Note this will only be used if a prerelease branch.
+# VERBOSE (optional) - Print git logs. For some projects these logs may be very large. Possible values are true (default) and false.
+# MAJOR_STRING_TOKEN (optional) - Change the default #major commit message string tag.
+# MINOR_STRING_TOKEN (optional) - Change the default #minor commit message string tag.
+# PATCH_STRING_TOKEN (optional) - Change the default #patch commit message string tag.
+# NONE_STRING_TOKEN (optional) - Change the default #none commit message string tag.
