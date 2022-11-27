@@ -6,9 +6,6 @@ on:
       - closed
     branches:
       - master
-  push:
-    branches-ignore:
-      - master
 
 jobs:
   build:
@@ -28,6 +25,8 @@ jobs:
         MINOR_STRING_TOKEN: "feat("
         PATCH_STRING_TOKEN: "fix("
         VERBOSE: true
+        DEFAULT_BUMP: patch
+        RELEASE_BRANCHES: master
 # GITHUB_TOKEN (required) - Required for permission to tag the repo.
 # DEFAULT_BUMP (optional) - Which type of bump to use when none explicitly provided (default: minor).
 # WITH_V (optional) - Tag version with v character.
