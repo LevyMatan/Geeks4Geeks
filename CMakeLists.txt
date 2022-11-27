@@ -18,9 +18,9 @@ find_package(Git)
 if(Git_FOUND)
   message("Git found: ${GIT_EXECUTABLE}")
 endif()
-set (VERSION_UPDATE_FROM_GIT "TRUE")
+set(VERSION_UPDATE_FROM_GIT "TRUE")
 include(cmake/GetVersionFromGitTag.cmake)
-set (PROJECT_VERSION "${${PROJECT_NAME}_VERSION_STRING}")
+set(PROJECT_VERSION "${${PROJECT_NAME}_VERSION_STRING}")
 # ---- Add dependencies via CPM ----
 # see https://github.com/TheLartians/CPM.cmake for more info
 

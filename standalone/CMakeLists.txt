@@ -7,7 +7,7 @@ find_package(Git)
 if(Git_FOUND)
   message("Git found: ${GIT_EXECUTABLE}")
 endif()
-set (VERSION_UPDATE_FROM_GIT "TRUE")
+set(VERSION_UPDATE_FROM_GIT "TRUE")
 include(../cmake/GetVersionFromGitTag.cmake)
 include(../cmake/tools.cmake)
 
