@@ -8,7 +8,12 @@ option(ENABLE_TEST_COVERAGE "Enable test coverage" OFF)
 option(TEST_INSTALLED_VERSION "Test the version found by find_package" OFF)
 
 # -- - Import tools -- --
-
+find_package(Git)
+if(Git_FOUND)
+  message("Git found: ${GIT_EXECUTABLE}")
+endif()
+set (VERSION_UPDATE_FROM_GIT "TRUE")
+include(../cmake/GetVersionFromGitTag.cmake)
 include(../cmake/tools.cmake)
 
 # -- -- Dependencies -- --

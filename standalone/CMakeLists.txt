@@ -3,7 +3,12 @@ cmake_minimum_required(VERSION 3.14...3.22)
 project(Geeks4GeeksStandalone LANGUAGES CXX)
 
 # --- Import tools ----
-
+find_package(Git)
+if(Git_FOUND)
+  message("Git found: ${GIT_EXECUTABLE}")
+endif()
+set (VERSION_UPDATE_FROM_GIT "TRUE")
+include(../cmake/GetVersionFromGitTag.cmake)
 include(../cmake/tools.cmake)
 
 # ---- Dependencies ----

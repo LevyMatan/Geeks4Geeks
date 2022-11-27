@@ -3,11 +3,7 @@ cmake_minimum_required(VERSION 3.14...3.22)
 # ---- Project ----
 
 # Note: update this to your new project's name and version
-project(
-  Geeks4Geeks
-  VERSION 1.0
-  LANGUAGES CXX
-)
+project(Geeks4Geeks LANGUAGES CXX)
 
 # ---- Include guards ----
 
@@ -18,6 +14,13 @@ if(PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
   )
 endif()
 
+find_package(Git)
+if(Git_FOUND)
+  message("Git found: ${GIT_EXECUTABLE}")
+endif()
+set (VERSION_UPDATE_FROM_GIT "TRUE")
+include(cmake/GetVersionFromGitTag.cmake)
+set (PROJECT_VERSION "${${PROJECT_NAME}_VERSION_STRING}")
 # ---- Add dependencies via CPM ----
 # see https://github.com/TheLartians/CPM.cmake for more info
 
