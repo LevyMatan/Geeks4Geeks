@@ -13,7 +13,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: paulhatch/semantic-version@v5.0.0
+      - uses: paulhatch/semantic-version@v4.0.3
         id: version
         with:
           # The prefix to use to identify tags
