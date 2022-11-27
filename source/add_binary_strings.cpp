@@ -8,9 +8,8 @@
  * @copyright Copyright (c) 2022
  *
  */
-#include <string>
 #include <algorithm>
-
+#include <string>
 
 /**
  * @brief Given two binary strings A and B consisting of only 0s and 1s.
@@ -50,7 +49,7 @@ namespace add_binary_strings
      */
     static void removeTrailingCharacters(std::string &str, const char charToRemove)
     {
-        str.erase (str.find_last_not_of(charToRemove) + 1, std::string::npos );
+        str.erase(str.find_last_not_of(charToRemove) + 1, std::string::npos);
     }
 
     /**
@@ -62,22 +61,22 @@ namespace add_binary_strings
      */
     static void comput_carry_and_char_from_sum(int sum, int &carry, char &digit)
     {
-        if(0 == sum)
+        if (0 == sum)
         {
             carry = 0;
             digit = '0';
         }
-        else if(1 == sum)
+        else if (1 == sum)
         {
             carry = 0;
             digit = '1';
         }
-        else if(2 == sum)
+        else if (2 == sum)
         {
             carry = 1;
             digit = '0';
         }
-        else if(3 == sum)
+        else if (3 == sum)
         {
             carry = 1;
             digit = '1';
@@ -98,7 +97,7 @@ namespace add_binary_strings
         unsigned long i;
         int carry = 0;
         std::string result("");
-        for(i = 0; (i < A.size()) && (i < B.size()); i++)
+        for (i = 0; (i < A.size()) && (i < B.size()); i++)
         {
             int digit_A = A[i] - '0';
             int digit_B = B[i] - '0';
@@ -110,7 +109,7 @@ namespace add_binary_strings
             result += digit;
         }
         // cout << result << endl;
-        while(i < A.size())
+        while (i < A.size())
         {
             int digit_A = A[i] - '0';
             int sum = carry + digit_A;
@@ -119,7 +118,7 @@ namespace add_binary_strings
             result += digit;
             i++;
         }
-        while(i < B.size())
+        while (i < B.size())
         {
             int digit_B = B[i] - '0';
             int sum = carry + digit_B;
@@ -128,15 +127,15 @@ namespace add_binary_strings
             result += digit;
             i++;
         }
-        if(1 == carry)
+        if (1 == carry)
         {
             result += '1';
         }
 
-        //remove trailing zeros from string
+        // remove trailing zeros from string
         removeTrailingCharacters(result, '0');
         reverse(result.begin(), result.end());
 
         return result;
     }
-}
+}  // namespace add_binary_strings

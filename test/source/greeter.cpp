@@ -4,7 +4,8 @@
 
 #include <string>
 
-TEST_CASE("Greeter") {
+TEST_CASE("Greeter")
+{
     using namespace greeter;
 
     Greeter greeter("Tests");
@@ -17,7 +18,8 @@ TEST_CASE("Greeter") {
     CHECK(greeter.greet(LanguageCode::HEB) == "Shalom Tests!");
 }
 
-TEST_CASE("Greeter version") {
+TEST_CASE("Greeter version")
+{
     static_assert(std::string_view(GEEKS4GEEKS_VERSION) == std::string_view("1.0"));
     CHECK(std::string(GEEKS4GEEKS_VERSION) == std::string("1.0"));
 }

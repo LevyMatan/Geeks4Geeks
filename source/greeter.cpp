@@ -5,8 +5,10 @@ using namespace greeter;
 
 Greeter::Greeter(std::string _name) : name(std::move(_name)) {}
 
-std::string Greeter::greet(LanguageCode lang) const {
-    switch (lang) {
+std::string Greeter::greet(LanguageCode lang) const
+{
+    switch (lang)
+    {
         default:
         case LanguageCode::EN:
             return fmt::format("Hello, {}!", name);

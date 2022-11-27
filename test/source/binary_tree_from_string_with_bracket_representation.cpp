@@ -4,7 +4,8 @@
 
 #include <string>
 
-TEST_CASE("Construct Binary Tree from String with bracket representation") {
+TEST_CASE("Construct Binary Tree from String with bracket representation")
+{
     using namespace binary_tree_from_string_with_bracket_representation;
     std::string str = "1(2)(45)";
     Node* p_res = treeFromString(str);

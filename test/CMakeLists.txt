@@ -2,16 +2,16 @@ cmake_minimum_required(VERSION 3.14...3.22)
 
 project(Geeks4GeeksTests LANGUAGES CXX)
 
-# ---- Options ----
+#-- -- Options -- --
 
 option(ENABLE_TEST_COVERAGE "Enable test coverage" OFF)
 option(TEST_INSTALLED_VERSION "Test the version found by find_package" OFF)
 
-# --- Import tools ----
+#-- - Import tools -- --
 
 include(../cmake/tools.cmake)
 
-# ---- Dependencies ----
+#-- -- Dependencies -- --
 
 include(../cmake/CPM.cmake)
 
@@ -24,7 +24,7 @@ else()
   CPMAddPackage(NAME Geeks4Geeks SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/..)
 endif()
 
-# ---- Create binary ----
+#-- -- Create binary -- --
 
 file(GLOB sources CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/source/*.cpp)
 add_executable(${PROJECT_NAME} ${sources})

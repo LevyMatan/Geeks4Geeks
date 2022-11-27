@@ -48,4 +48,4 @@ namespace add_binary_strings
      * @return string representing the sum of A and B
      */
     std::string add_binary(std::string A, std::string B);
-}
+}  // namespace add_binary_strings

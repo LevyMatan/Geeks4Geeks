@@ -44,7 +44,8 @@
  * URL: https://practice.geeksforgeeks.org/problems/shreyansh-and-his-bits1420/1
  *
  */
-namespace shenyrash_and_his_bits {
+namespace shenyrash_and_his_bits
+{
 
     /**
      * @brief count the number of numbers strictly lower than x

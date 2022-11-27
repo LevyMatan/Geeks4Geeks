@@ -36,7 +36,8 @@
  * URL:
  * https://practice.geeksforgeeks.org/problems/construct-binary-tree-from-string-with-bracket-representation/1
  */
-namespace binary_tree_from_string_with_bracket_representation {
+namespace binary_tree_from_string_with_bracket_representation
+{
 
     /**
      * @brief
@@ -45,16 +46,19 @@ namespace binary_tree_from_string_with_bracket_representation {
      * @param i
      * @return Node*
      */
-    Node *treeFromStringRec(std::string &str, unsigned long &i) {
+    Node *treeFromStringRec(std::string &str, unsigned long &i)
+    {
         // printf("i = %d\n", i);
-        if (i >= str.size()) {
+        if (i >= str.size())
+        {
             return NULL;
         }
 
         // Get number
         int power = 10;
         int num = 0;
-        while (i < str.size() && isdigit(str[i])) {
+        while (i < str.size() && isdigit(str[i]))
+        {
             // printf("str[i] = %c\n", str[i]);
             num = power * num + (str[i] - '0');
             i++;
@@ -62,22 +66,26 @@ namespace binary_tree_from_string_with_bracket_representation {
         Node *p_root = new Node(num);
 
         // printf("p_root->data = %d\n", p_root->data);
-        if (i < str.size() && str[i] == '(') {
+        if (i < str.size() && str[i] == '(')
+        {
             i++;
             p_root->left = treeFromStringRec(str, i);
         }
-        if (i < str.size() && str[i] == '(') {
+        if (i < str.size() && str[i] == '(')
+        {
             i++;
             p_root->right = treeFromStringRec(str, i);
         }
-        if (i < str.size()) {
+        if (i < str.size())
+        {
             i++;
         }
 
         return p_root;
     }
 
-    Node *treeFromString(std::string str) {
+    Node *treeFromString(std::string str)
+    {
         unsigned long idx = 0;
         return treeFromStringRec(str, idx);
     }

@@ -63,21 +63,20 @@ namespace shenyrash_and_his_bits
          *                We can generate numbers stricly lower in two manners.
          *                  Turn LMB OFF :
          *                      Compute the number of permutation of K bits in N cells.
-         *                      That is exactly n choose k which we can compute before with pascal triangle.
-         *                  Keep LMB ON :
-         *                      Find the next LMB wich is ON and repeat step 2.
+         *                      That is exactly n choose k which we can compute before with pascal
+         * triangle. Keep LMB ON : Find the next LMB wich is ON and repeat step 2.
          *
          */
 
         // First we need to count the number of bits in x
         // This is a O(1) operation
-        long long count = 0; /// count the number of bits SET in x.
-        long long max_idx = 0; /// Keep the Left Most Bit SET in x.
-        for(long long idx = 63; idx >= 0; idx--)
+        long long count = 0;    /// count the number of bits SET in x.
+        long long max_idx = 0;  /// Keep the Left Most Bit SET in x.
+        for (long long idx = 63; idx >= 0; idx--)
         {
-            if(x & (1ULL << idx))
+            if (x & (1ULL << idx))
             {
-                if(idx > max_idx)
+                if (idx > max_idx)
                 {
                     max_idx = idx;
                 }
@@ -85,7 +84,7 @@ namespace shenyrash_and_his_bits
             }
         }
 
-        if((max_idx+1) == count)
+        if ((max_idx + 1) == count)
         {
             return 0;
         }
@@ -94,16 +93,17 @@ namespace shenyrash_and_his_bits
          * @brief Fill n choose k by doing "Pascal Triangle"
          *
          */
-        std::vector<std::vector<long long>> n_choose_k(max_idx+1, std::vector<long long>(max_idx+1, 0));
-        for(long long n = 1; n < max_idx+1; n++)
+        std::vector<std::vector<long long>> n_choose_k(max_idx + 1,
+                                                       std::vector<long long>(max_idx + 1, 0));
+        for (long long n = 1; n < max_idx + 1; n++)
         {
-            for(long long k = 0; k <= n; k++)
+            for (long long k = 0; k <= n; k++)
             {
-                if(k == 0)
+                if (k == 0)
                 {
                     n_choose_k[n][k] = 1;
                 }
-                else if(k == n)
+                else if (k == n)
                 {
                     n_choose_k[n][k] = 1;
                 }
@@ -113,16 +113,16 @@ namespace shenyrash_and_his_bits
                 }
                 else
                 {
-                    n_choose_k[n][k] = n_choose_k[n-1][k-1] + n_choose_k[n-1][k];
+                    n_choose_k[n][k] = n_choose_k[n - 1][k - 1] + n_choose_k[n - 1][k];
                 }
                 // printf("n_choose_k[%d][%d] = %lld\n", n,k, n_choose_k[n][k]);
             }
         }
 
-        long long count_permutations = 0; /// count the number of numbers lower than x.
-        for(long long idx = 63; idx > 0; idx--)
+        long long count_permutations = 0;  /// count the number of numbers lower than x.
+        for (long long idx = 63; idx > 0; idx--)
         {
-            if(x & (1ULL << idx))
+            if (x & (1ULL << idx))
             {
                 // With bit OFF
                 // printf("x had bit %lld on, there are %d bits to toggle\n", idx, count);
@@ -132,6 +132,5 @@ namespace shenyrash_and_his_bits
         }
 
         return count_permutations;
-
     }
-}
+}  // namespace shenyrash_and_his_bits

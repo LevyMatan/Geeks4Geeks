@@ -34,17 +34,20 @@
  * URL:
  * https://practice.geeksforgeeks.org/problems/construct-binary-tree-from-string-with-bracket-representation/1
  */
-namespace binary_tree_from_string_with_bracket_representation {
+namespace binary_tree_from_string_with_bracket_representation
+{
 
     /**
      * @brief Node struct for a simple binary tree.
      *
      */
-    class Node {
+    class Node
+    {
       public:
         int data;
         Node *left, *right;
-        Node(int data) {
+        Node(int data)
+        {
             this->data = data;
             this->left = this->right = NULL;
         }
