@@ -1,3 +1,4 @@
+#pragma once
 #include <string>
 /**
  * @brief Construct Binary Tree from String with bracket representation
