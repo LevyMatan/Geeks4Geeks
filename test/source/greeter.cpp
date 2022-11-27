@@ -20,6 +20,6 @@ TEST_CASE("Greeter")
 
 TEST_CASE("Greeter version")
 {
-    CHECK(std::string(GEEKS4GEEKS_VERSION) == std::string("v0.8.5"));
-    static_assert(std::string_view(GEEKS4GEEKS_VERSION) == std::string_view("v0.8.5"));
+    CHECK(std::string(GEEKS4GEEKS_VERSION) == std::string("v0.9.1"));
+    static_assert(std::string_view(GEEKS4GEEKS_VERSION) == std::string_view("v0.9.1"));
 }
