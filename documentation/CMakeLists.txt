@@ -6,7 +6,7 @@ project(Geeks4GeeksDocs)
 
 include(../cmake/CPM.cmake)
 
-CPMAddPackage("gh:mosra/m.css#a0d292ec311b97fefd21e93cdefb60f88d19ede6")
+CPMAddPackage("gh:mosra/m.css#v0.36.0")
 CPMAddPackage(NAME Geeks4Geeks SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/..)
 
 # ---- Doxygen variables ----
