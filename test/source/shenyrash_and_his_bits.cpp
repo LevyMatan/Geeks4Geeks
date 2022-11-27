@@ -48,4 +48,10 @@ TEST_CASE("Shenyrash and His Bits")
         CHECK(shenyrash_and_his_bits::count(N)
               == shenyrash_and_his_bits::count_numbers_with_n_set_bits_brute_force(N));
     }
+
+    // Test for full rank number
+    long long N = 1023;
+    MESSAGE("Test case N = ", N);
+    CHECK(shenyrash_and_his_bits::count(N)
+          == shenyrash_and_his_bits::count_numbers_with_n_set_bits_brute_force(N));
 }
