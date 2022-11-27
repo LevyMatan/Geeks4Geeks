@@ -12,7 +12,7 @@ Here are a bunch of coding question solutions.
 ## Add Binary Strings
 
 Given two binary strings A and B consisting of only 0s and 1s.
-Find the resultant string after adding the two Binary Strings.
+Find the resultant string after adding the two Binary Strings.  
 Note: The input strings may contain leading zeros but the output
 string should not have any leading zeros.
 
@@ -45,12 +45,12 @@ URL: https://practice.geeksforgeeks.org/problems/add-binary-strings3805/1
 ## Shenyrash and his Bits
 
 Shreyansh has an integer N.
-He is really curious about the binary representation of integers.
+He is really curious about the binary representation of integers.  
 He sees that any given integer has a number of set bits.
 Now he wants to find out that how many positive integers,
-strictly less than N, have the same number of set bits as N.
+strictly less than N, have the same number of set bits as N.  
 He is a little weak in maths. Help him find the number of integers.
-Note : Since N takes large values, brute force won't work.
+Note : Since N takes large values, brute force won't work.  
 
 ### Example 1
 
@@ -78,11 +78,10 @@ Note : Since N takes large values, brute force won't work.
         So, The result is 2.
 ```
 
-        Expected Time Complexity: O(log(n))
-        Expected Auxiliary Space: O(log(n)*log(n))
+Expected Time Complexity: O(log(n))  
+Expected Auxiliary Space: O(log(n)*log(n))  
 
+Constraints :  
+1 <= N <= 10^12  
 
-        Constraints :
-        1 <= N <= 10^12
-
- URL: https://practice.geeksforgeeks.org/problems/shreyansh-and-his-bits1420/1
+URL: https://practice.geeksforgeeks.org/problems/shreyansh-and-his-bits1420/1
