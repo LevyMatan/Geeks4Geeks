@@ -1,5 +1,5 @@
-#include <maximum_sub_array/maximum_sub_array.h>
 #include <doctest/doctest.h>
+#include <maximum_sub_array/maximum_sub_array.h>
 
 #include <vector>
 
