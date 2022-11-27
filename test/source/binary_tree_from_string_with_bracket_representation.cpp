@@ -17,8 +17,3 @@ TEST_CASE("Construct Binary Tree from String with bracket representation")
     delete p_res->right;
     delete p_res;
 }
-
-// TEST_CASE("Greeter version") {
-//   static_assert(std::string_view(GEEKS4GEEKS_VERSION) == std::string_view("1.0"));
-//   CHECK(std::string(GEEKS4GEEKS_VERSION) == std::string("1.0"));
-// }
