@@ -107,6 +107,7 @@ namespace add_binary_strings
             // cout << "sum = " << sum << endl;
             char digit = '0';
             comput_carry_and_char_from_sum(sum, carry, digit);
+            result += digit;
         }
         // cout << result << endl;
         while(i < A.size())
@@ -115,6 +116,7 @@ namespace add_binary_strings
             int sum = carry + digit_A;
             char digit = '0';
             comput_carry_and_char_from_sum(sum, carry, digit);
+            result += digit;
             i++;
         }
         while(i < B.size())
@@ -123,6 +125,7 @@ namespace add_binary_strings
             int sum = carry + digit_B;
             char digit = '0';
             comput_carry_and_char_from_sum(sum, carry, digit);
+            result += digit;
             i++;
         }
         if(1 == carry)
