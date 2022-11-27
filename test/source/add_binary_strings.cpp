@@ -3,6 +3,7 @@
 #include <geeks4geeks/version.h>
 #include <bitset>
 #include <string>
+#include <stdlib.h>
 
 TEST_CASE("Add binary strings") {
     using namespace add_binary_strings;
@@ -10,8 +11,8 @@ TEST_CASE("Add binary strings") {
     for (int i = 0; i < 5; i++)
     {
         // Generate random binary string from numbers
-        long long first_num = random();
-        long long second_num = random();
+        long long first_num = rand();
+        long long second_num = rand();
         long long sum = first_num + second_num;
 
         std::string first_string = std::bitset< 64 >( first_num ).to_string();

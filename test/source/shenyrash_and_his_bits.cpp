@@ -1,7 +1,7 @@
 #include <doctest/doctest.h>
 #include <geeks4geeks/version.h>
 #include <shenyrash_and_his_bits/shenyrash_and_his_bits.h>
-#include <random>
+#include <stdlib.h>
 
 namespace shenyrash_and_his_bits
 {
@@ -43,7 +43,7 @@ TEST_CASE("Shenyrash and His Bits") {
 
     for(long long test_case = 0; test_case < 5; test_case++)
     {
-        long long N = random() % 10000;
+        long long N = rand() % 10000;
         MESSAGE("Test case N = ", N);
         CHECK(shenyrash_and_his_bits::count(N) == shenyrash_and_his_bits::count_numbers_with_n_set_bits_brute_force(N));
     }
