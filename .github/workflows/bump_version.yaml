@@ -51,14 +51,8 @@ jobs:
         env:
           VERSION: ${{ steps.versioning.outputs.version_tag }}
         run: |
-          echo "The version is: ${VERSION}"
-          echo "Addind a new feature"
-          echo "Addind a new fix"
-          echo "Addind a new BREAKING! fix"
-          echo "Addind a new fix"
-          echo "Addind a new feature"
-          # git tag ${{ steps.semver.outputs.next }}
-          # git push --tags
+          git tag ${VERSION}
+          git push --tags
 
 #     - uses: actions/checkout@v3
 #       with:
