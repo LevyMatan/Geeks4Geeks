@@ -52,6 +52,7 @@ jobs:
         run: |
           echo "The version is: ${VERSION}"
           echo "Addind a new feature"
+          echo "Addind a new fix"
           # git tag ${{ steps.semver.outputs.next }}
           # git push --tags
 
