@@ -46,10 +46,11 @@ jobs:
           # The output method used to generate list of users, 'csv' or 'json'.
           user_format_type: "csv"
       - name: Tag commit
-        id: prepare
+        id: tag-commit
         shell: bash
         env:
           VERSION: ${{ steps.versioning.outputs.version_tag }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           git tag ${VERSION}
           git push --tags
