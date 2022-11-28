@@ -6,7 +6,7 @@ on:
       - closed
     branches:
       - master
-      
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -16,18 +16,44 @@ jobs:
         with:
           fetch-depth: '0'
 
-      - name: Get Next Version
-        id: semver
-        uses: ietf-tools/semver-action@v1
+      - name: Get Version
+        id: versioning
+        uses: paulhatch/semantic-version@v4.0.3
         with:
-          token: ${{ github.token }}
-          branch: main
-
-      - name: Create Tag
+          # The prefix to use to identify tags
+          tag_prefix: "v"
+          # A string which, if present in a git commit, indicates that a change represents a
+          # major (breaking) change, supports regular expressions wrapped with '/'
+          major_pattern: "BREAKING!"
+          # A string which indicates the flags used by the `major_pattern` regular expression. Supported flags: idgs
+          # major_regexp_flags: ""
+          # Same as above except indicating a minor change, supports regular expressions wrapped with '/'
+          minor_pattern: "feat("
+          # A string which indicates the flags used by the `minor_pattern` regular expression. Supported flags: idgs
+          # minor_regexp_flags: ""
+          # A string to determine the format of the version output
+          format: "${major}.${minor}.${patch}-prerelease${increment}"
+          # Optional path to check for changes. If any changes are detected in the path the
+          # 'changed' output will true. Enter multiple paths separated by spaces.
+          # change_path: "src/my-service"
+          # Named version, will be used as suffix for name version tag
+          # namespace: my-service
+          # If this is set to true, *every* commit will be treated as a new version.
+          bump_each_commit: false
+          # If true, the body of commits will also be searched for major/minor patterns to determine the version type.
+          search_commit_body: false
+          # The output method used to generate list of users, 'csv' or 'json'.
+          user_format_type: "csv"
+      - name: Tag commit
+        id: prepare
+        shell: bash
+        env:
+          VERSION: ${{ steps.versioning.outputs.version_tag }}
         run: |
-          git tag ${{ steps.semver.outputs.next }}
-          git push --tags
-          
+          echo "The version is: ${VERSION}"
+          # git tag ${{ steps.semver.outputs.next }}
+          # git push --tags
+
 #     - uses: actions/checkout@v3
 #       with:
 #         ref: ${{ github.event.pull_request.head.sha }}
