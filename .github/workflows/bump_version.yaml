@@ -6,27 +6,44 @@ on:
       - closed
     branches:
       - master
-
+      
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-      with:
-        ref: ${{ github.event.pull_request.head.sha }}
-        fetch-depth: '0'
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: '0'
 
-    - name: Bump version and push tag
-      uses: anothrNick/github-tag-action@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        WITH_V: true
-        MAJOR_STRING_TOKEN: "BREAKING!"
-        MINOR_STRING_TOKEN: "feat("
-        PATCH_STRING_TOKEN: "fix("
-        VERBOSE: true
-        DEFAULT_BUMP: patch
-        RELEASE_BRANCHES: master
+      - name: Get Next Version
+        id: semver
+        uses: ietf-tools/semver-action@v1
+        with:
+          token: ${{ github.token }}
+          branch: main
+
+      - name: Create Tag
+        run: |
+          git tag ${{ steps.semver.outputs.next }}
+          git push --tags
+          
+#     - uses: actions/checkout@v3
+#       with:
+#         ref: ${{ github.event.pull_request.head.sha }}
+#         fetch-depth: '0'
+
+#     - name: Bump version and push tag
+#       uses: anothrNick/github-tag-action@v1
+#       env:
+#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#         WITH_V: true
+#         MAJOR_STRING_TOKEN: "BREAKING!"
+#         MINOR_STRING_TOKEN: "feat("
+#         PATCH_STRING_TOKEN: "fix("
+#         VERBOSE: true
+#         DEFAULT_BUMP: patch
+#         RELEASE_BRANCHES: master
 # GITHUB_TOKEN (required) - Required for permission to tag the repo.
 # DEFAULT_BUMP (optional) - Which type of bump to use when none explicitly provided (default: minor).
 # WITH_V (optional) - Tag version with v character.
