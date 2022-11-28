@@ -55,6 +55,7 @@ jobs:
           echo "Addind a new fix"
           echo "Addind a new BREAKING! fix"
           echo "Addind a new fix"
+          echo "Addind a new feature"
           # git tag ${{ steps.semver.outputs.next }}
           # git push --tags
 
