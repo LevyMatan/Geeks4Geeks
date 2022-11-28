@@ -40,8 +40,8 @@ Explanation:
   11
 ```
 
-URL: https://practice.geeksforgeeks.org/problems/add-binary-strings3805/1
-
+URL: https://practice.geeksforgeeks.org/problems/add-binary-strings3805/1  
+[Solution](/source/add_binary_strings.cpp)
 ## Shenyrash and his Bits
 
 Shreyansh has an integer N.
@@ -84,4 +84,5 @@ Expected Auxiliary Space: O(log(n)*log(n))
 Constraints :  
 1 <= N <= 10^12  
 
-URL: https://practice.geeksforgeeks.org/problems/shreyansh-and-his-bits1420/1
+URL: https://practice.geeksforgeeks.org/problems/shreyansh-and-his-bits1420/1  
+[Solution](/source/shenyrash_and_his_bits.cpp)
