@@ -53,6 +53,8 @@ jobs:
         run: |
           git tag ${VERSION}
           git push --tags
+          # Explicitly run our release workflow for this new tag
+          gh workflow run documentation.yaml --ref ${VERSION}
 
 #     - uses: actions/checkout@v3
 #       with:
