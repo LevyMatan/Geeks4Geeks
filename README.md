@@ -1,11 +1,11 @@
+# Geeks For Geeks - Problem of the Day
+
 [![Actions Status](https://github.com/LevyMatan/Geeks4Geeks/workflows/MacOS/badge.svg)](https://github.com/LevyMatan/Geeks4Geeks/actions)
 [![Actions Status](https://github.com/LevyMatan/Geeks4Geeks/workflows/Windows/badge.svg)](https://github.com/LevyMatan/Geeks4Geeks/actions)
 [![Actions Status](https://github.com/LevyMatan/Geeks4Geeks/workflows/Ubuntu/badge.svg)](https://github.com/LevyMatan/Geeks4Geeks/actions)
 [![Actions Status](https://github.com/LevyMatan/Geeks4Geeks/workflows/Style/badge.svg)](https://github.com/LevyMatan/Geeks4Geeks/actions)
 [![Actions Status](https://github.com/LevyMatan/Geeks4Geeks/workflows/Install/badge.svg)](https://github.com/LevyMatan/Geeks4Geeks/actions)
 [![codecov](https://codecov.io/gh/LevyMatan/Geeks4Geeks/branch/master/graph/badge.svg)](https://codecov.io/gh/LevyMatan/Geeks4Geeks)
-
-# Geeks For Geeks - Problem of the Day
 
 Here are a bunch of coding question solutions.
 
@@ -40,7 +40,8 @@ Explanation:
   11
 ```
 
-URL: https://practice.geeksforgeeks.org/problems/add-binary-strings3805/1
+URL: <https://practice.geeksforgeeks.org/problems/add-binary-strings3805/1>  
+:rocket: [Solution](/source/add_binary_strings.cpp)
 
 ## Shenyrash and his Bits
 
@@ -84,4 +85,64 @@ Expected Auxiliary Space: O(log(n)*log(n))
 Constraints :  
 1 <= N <= 10^12  
 
-URL: https://practice.geeksforgeeks.org/problems/shreyansh-and-his-bits1420/1
+URL: <https://practice.geeksforgeeks.org/problems/shreyansh-and-his-bits1420/1>  
+:rocket: [Solution](/source/shenyrash_and_his_bits.cpp)
+
+## Maximum Subarray
+
+Find out the maximum sub-array of non negative numbers from an array.
+
+The sub-array should be contiguous i.e., a sub-array created by choosing the second and
+fourth element and skipping the third element is invalid.
+
+Maximum sub-array is defined in terms of the sum of the elements in the sub-array.
+Sub-array A is greater than sub-array B if sum(A) > sum(B).
+
+### Example
+
+```txt
+a = [1, 2, 5, -7, 2, 3]
+The two sub-arrays are [1, 2, 5] [2, 3].
+The answer is [1, 2, 5] as its sum is larger than [2, 3]
+```
+
+NOTE: If there is a tie, then compare with segment's length and return segment which has
+maximum length. If there is still a tie, then return the segment with minimum starting index. If
+no such subarray is present return "-1"
+
+### Example 1
+
+```txt
+Input:
+n = 3
+a[] = {1, 2, 3}
+Output: 1 2 3
+Explanation: In the given array every
+element is non-negative.
+```
+
+### Example 2
+
+```txt
+Input:
+n = 2
+a[] = {-1, 2}
+Output: 2
+Explanation: The only subarray [2] is
+the answer.
+```
+
+Your Task:  
+Complete the function findSubarray() which takes the array a and the size of the array, n,  
+as input parameters and returns an array representing the answer. If there is no subarray return  
+an array of length 1 containing -1 only. You don't to print answer or take inputs.  
+
+Expected Time Complexity: O(N)  
+Expected Auxiliary Space: O(1)  
+
+Constraints:  
+1 ≤ N ≤ 105  
+-105 ≤ A[i] ≤ 105  
+
+URL: <https://practice.geeksforgeeks.org/problems/maximum-sub-array5443/1>  
+:rocket: [Solution](/source/maximum_sub_array.cpp)
