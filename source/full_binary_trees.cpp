@@ -100,7 +100,7 @@ namespace full_binary_trees
             mark[arr[i]] = true;  // it is there
             value[arr[i]] = 1;    // single node forms a complete binary tree
         }
-        int ans = 0;
+        long long int ans = 0;
         for (long long int i = minValue; i <= maxValue; ++i)
         {
             if (mark[i])
