@@ -98,8 +98,6 @@ fourth element and skipping the third element is invalid.
 Maximum sub-array is defined in terms of the sum of the elements in the sub-array.
 Sub-array A is greater than sub-array B if sum(A) > sum(B).
 
-### Example
-
 ```txt
 a = [1, 2, 5, -7, 2, 3]
 The two sub-arrays are [1, 2, 5] [2, 3].
