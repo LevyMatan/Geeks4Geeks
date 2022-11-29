@@ -4,7 +4,7 @@
 TEST_CASE("Count the Number of Full Binary Trees")
 {
     using namespace full_binary_trees;
-    MESSAGE("This a little more info on the test");
+    MESSAGE("First test case");
     long long int arr[] = {2, 4, 8, 12};
     /**
      * [1]
@@ -48,6 +48,18 @@ TEST_CASE("Count the Number of Full Binary Trees")
      * [9]
      * 12
      */
-
     CHECK(numoffbt(arr, 4) == 9);
+
+    MESSAGE("Second test case");
+    long long int arr2[] = {3, 5, 28};
+    /**
+     * [1]
+     *      3
+     * [2]
+     *      5
+     * [3]
+     *      28
+     */
+
+    CHECK(numoffbt(arr2, 3) == 3);
 }
