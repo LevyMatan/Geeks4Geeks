@@ -77,14 +77,14 @@ Explanation:
 Binary representation of 4 : 100
 So the integers less than 4 with
 same number of set bits are : 2, 1
-So, The result is 2.</pre><p>Expected Time Complexity: O(log(n))<br />Expected Auxiliary Space: O(log(n)*log(n))<br /></p><p>Constraints :<br />1 &lt;= N &lt;= 10^12<br /></p><p>URL: <a href="https://practice.geeksforgeeks.org/problems/shreyansh-and-his-bits1420/1">https:/<wbr />/<wbr />practice.geeksforgeeks.org/<wbr />problems/<wbr />shreyansh-and-his-bits1420/<wbr />1</a><br />:rocket: <a href="/source/shenyrash_and_his_bits.cpp">Solution</a></p></section></section><section id="autotoc_md7"><h2><a href="#autotoc_md7">Maximum Subarray</a></h2><p>Find out the maximum sub-array of non negative numbers from an array.</p><p>The sub-array should be contiguous i.e., a sub-array created by choosing the second and fourth element and skipping the third element is invalid.</p><p>Maximum sub-array is defined in terms of the sum of the elements in the sub-array. Sub-array A is greater than sub-array B if sum(A) &gt; sum(B).</p><section id="autotoc_md8"><h3><a href="#autotoc_md8">Example</a></h3><pre class="m-code">a = [1, 2, 5, -7, 2, 3]
+So, The result is 2.</pre><p>Expected Time Complexity: O(log(n))<br />Expected Auxiliary Space: O(log(n)*log(n))<br /></p><p>Constraints :<br />1 &lt;= N &lt;= 10^12<br /></p><p>URL: <a href="https://practice.geeksforgeeks.org/problems/shreyansh-and-his-bits1420/1">https:/<wbr />/<wbr />practice.geeksforgeeks.org/<wbr />problems/<wbr />shreyansh-and-his-bits1420/<wbr />1</a><br />:rocket: <a href="/source/shenyrash_and_his_bits.cpp">Solution</a></p></section></section><section id="autotoc_md7"><h2><a href="#autotoc_md7">Maximum Subarray</a></h2><p>Find out the maximum sub-array of non negative numbers from an array.</p><p>The sub-array should be contiguous i.e., a sub-array created by choosing the second and fourth element and skipping the third element is invalid.</p><p>Maximum sub-array is defined in terms of the sum of the elements in the sub-array. Sub-array A is greater than sub-array B if sum(A) &gt; sum(B).</p><pre class="m-code">a = [1, 2, 5, -7, 2, 3]
 The two sub-arrays are [1, 2, 5] [2, 3].
-The answer is [1, 2, 5] as its sum is larger than [2, 3]</pre><p>NOTE: If there is a tie, then compare with segment&#x27;s length and return segment which has maximum length. If there is still a tie, then return the segment with minimum starting index. If no such subarray is present return &quot;-1&quot;</p></section><section id="autotoc_md9"><h3><a href="#autotoc_md9">Example 1</a></h3><pre class="m-code">Input:
+The answer is [1, 2, 5] as its sum is larger than [2, 3]</pre><p>NOTE: If there is a tie, then compare with segment&#x27;s length and return segment which has maximum length. If there is still a tie, then return the segment with minimum starting index. If no such subarray is present return &quot;-1&quot;</p><section id="autotoc_md8"><h3><a href="#autotoc_md8">Example 1</a></h3><pre class="m-code">Input:
 n = 3
 a[] = {1, 2, 3}
 Output: 1 2 3
 Explanation: In the given array every
-element is non-negative.</pre></section><section id="autotoc_md10"><h3><a href="#autotoc_md10">Example 2</a></h3><pre class="m-code">Input:
+element is non-negative.</pre></section><section id="autotoc_md9"><h3><a href="#autotoc_md9">Example 2</a></h3><pre class="m-code">Input:
 n = 2
 a[] = {-1, 2}
 Output: 2
