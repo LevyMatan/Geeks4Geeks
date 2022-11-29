@@ -58,5 +58,5 @@
  */
 namespace full_binary_trees
 {
-    void full_binary_trees_function(void);
+    long long int numoffbt(long long int arr[], int n);
 }  // namespace full_binary_trees
