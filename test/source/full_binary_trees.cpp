@@ -1,12 +1,11 @@
 #include <doctest/doctest.h>
 #include <full_binary_trees/full_binary_trees.h>
 
-
 TEST_CASE("Count the Number of Full Binary Trees")
 {
     using namespace full_binary_trees;
     MESSAGE("This a little more info on the test");
-    long long int arr[] = {2, 4, 8 ,12};
+    long long int arr[] = {2, 4, 8, 12};
     /**
      * [1]
      *   4

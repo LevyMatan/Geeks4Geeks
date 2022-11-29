@@ -47,7 +47,9 @@
  *
  *
  *        Your Task:
- *        You don't need to read input or print anything. Your task is to complete the function numoffbt() which takes the array arr[]and its size n as inputs and returns the number of Full binary tree.
+ *        You don't need to read input or print anything. Your task is to complete the function
+ * numoffbt() which takes the array arr[]and its size n as inputs and returns the number of Full
+ * binary tree.
  *
  *        Expected Time Complexity: O(n. Log(n))
  *        Expected Auxiliary Space: O(n)

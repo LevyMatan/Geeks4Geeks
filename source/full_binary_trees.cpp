@@ -9,6 +9,8 @@
  *
  */
 #include <full_binary_trees/full_binary_trees.h>
+
+#include <climits>
 #include <vector>
 
 /**
@@ -58,7 +60,9 @@
  *
  *
  *        Your Task:
- *        You don't need to read input or print anything. Your task is to complete the function numoffbt() which takes the array arr[]and its size n as inputs and returns the number of Full binary tree.
+ *        You don't need to read input or print anything. Your task is to complete the function
+ * numoffbt() which takes the array arr[]and its size n as inputs and returns the number of Full
+ * binary tree.
  *
  *        Expected Time Complexity: O(n. Log(n))
  *        Expected Auxiliary Space: O(n)
@@ -77,7 +81,7 @@ namespace full_binary_trees
      * @param n
      * @return long long int
      */
-   long long int numoffbt(long long int arr[], int n)
+    long long int numoffbt(long long int arr[], int n)
     {
         long long int maxValue = LLONG_MIN;
         long long int minValue = LLONG_MAX;
@@ -88,29 +92,36 @@ namespace full_binary_trees
             minValue = (minValue > arr[i]) ? (arr[i]) : (minValue);
         }
 
-        std::vector<bool> mark(maxValue+1, false);
-        std::vector<long long int> value(maxValue+1, 0);
+        std::vector<bool> mark(maxValue + 1, false);
+        std::vector<long long int> value(maxValue + 1, 0);
 
-        for(int i=0; i<n; ++i){
-            mark[arr[i]] = true; // it is there
-            value[arr[i]] = 1; // single node forms a complete binary tree
+        for (int i = 0; i < n; ++i)
+        {
+            mark[arr[i]] = true;  // it is there
+            value[arr[i]] = 1;    // single node forms a complete binary tree
         }
         int ans = 0;
-        for(long long int i=minValue; i<=maxValue; ++i){
-            if(mark[i]){ // if it is prime, go for multiples and unmark them, similarly, if it is there in arr, find for other node to get a parent node which is in array
-                for(long long int j=i+i; j<=maxValue && j<=i*i; j+=i){
-                    if(mark[j] == false){
-                        continue; // not there in array
+        for (long long int i = minValue; i <= maxValue; ++i)
+        {
+            if (mark[i])
+            {  // if it is prime, go for multiples and unmark them, similarly, if it is there in
+               // arr, find for other node to get a parent node which is in array
+                for (long long int j = i + i; j <= maxValue && j <= i * i; j += i)
+                {
+                    if (mark[j] == false)
+                    {
+                        continue;  // not there in array
                     }
-                    value[j] = (value[j]+value[i]*value[j/i]%MOD)%MOD;
+                    value[j] = (value[j] + value[i] * value[j / i] % MOD) % MOD;
                     // we can interchage left subtree and right subtree
-                    if(i != j/i){
-                        value[j] = (value[j]+value[i]*value[j/i]%MOD)%MOD;
+                    if (i != j / i)
+                    {
+                        value[j] = (value[j] + value[i] * value[j / i] % MOD) % MOD;
                     }
                 }
             }
-            ans = (ans + value[i])%MOD;
+            ans = (ans + value[i]) % MOD;
         }
         return ans;
     }
-}
+}  // namespace full_binary_trees
