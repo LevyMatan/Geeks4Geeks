@@ -20,7 +20,20 @@ include(../cmake/tools.cmake)
 
 include(../cmake/CPM.cmake)
 
-CPMAddPackage("gh:onqtam/doctest@2.4.8")
+CPMAddPackage(
+  NAME fmt
+  GIT_TAG 8.1.1
+  GITHUB_REPOSITORY fmtlib/fmt
+  OPTIONS "FMT_INSTALL YES" # create an installable target
+)
+
+FetchContent_Declare(
+  doctest
+  GIT_REPOSITORY https://github.com/doctest/doctest.git
+  GIT_TAG b7c21ec5ceeadb4951b00396fc1e4642dd347e5f # 2.4.9
+)
+
+FetchContent_MakeAvailable(doctest)
 CPMAddPackage("gh:TheLartians/Format.cmake@1.7.3")
 
 if(TEST_INSTALLED_VERSION)
@@ -30,10 +43,10 @@ else()
 endif()
 
 # -- -- Create binary -- --
-
 file(GLOB sources CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/source/*.cpp)
 add_executable(${PROJECT_NAME} ${sources})
-target_link_libraries(${PROJECT_NAME} doctest::doctest Geeks4Geeks::Geeks4Geeks)
+# target_link_libraries(${PROJECT_NAME} PRIVATE fmt::fmt)
+target_link_libraries(${PROJECT_NAME} PRIVATE doctest::doctest Geeks4Geeks::Geeks4Geeks fmt::fmt)
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17)
 
 # enable compiler warnings
