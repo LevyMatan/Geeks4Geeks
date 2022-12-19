@@ -1,10 +1,10 @@
 #include <doctest/doctest.h>
+#include <fmt/format.h>
 #include <shortest_path_by_removing_k/shortest_path_by_removing_k.h>
 
 #include <fstream>
 #include <iostream>
 #include <vector>
-#include <fmt/format.h>
 
 TEST_CASE("shortest_path_by_removing_k")
 {
@@ -37,7 +37,7 @@ TEST_CASE("shortest_path_by_removing_k")
         std::string dir_path = file_path.substr(0, file_path.rfind("/"));
         std::string test_case_file_full_path = (dir_path + "/" + test_case_filename);
         std::ifstream big_testcase(test_case_file_full_path, std::ifstream::in);
-        if(!big_testcase.is_open())
+        if (!big_testcase.is_open())
         {
             throw fmt::format("Failed to open Test Case file: {}\n", test_case_file_full_path);
         }
