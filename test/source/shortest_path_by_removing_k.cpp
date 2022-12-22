@@ -17,17 +17,18 @@ TEST_CASE("shortest_path_by_removing_k")
     mat.push_back(std::vector<int>({0, 1, 0}));
     mat.push_back(std::vector<int>({1, 1, 0}));
     mat.push_back(std::vector<int>({0, 0, 0}));
-    int n = mat.size();
-    int m = mat[0].size();
+    int n = (int)mat.size();
+    int m = (int)mat[0].size();
     int k = 0;
-    MESSAGE("n = %d, m = %d, k = %d\n", n, m, k);
-    CHECK(shortestPath(mat, mat.size(), mat[0].size(), k) == 7);
+    CHECK(shortestPath(mat, n, m, k) == 7);
 
     mat.push_back(std::vector<int>({0, 1, 1}));
     mat.push_back(std::vector<int>({0, 0, 0}));
-    MESSAGE("n = %d, m = %d, k = %d\n", n, m, k);
-    CHECK(shortestPath(mat, mat.size(), mat[0].size(), k) == 13);
-    CHECK(shortestPath(mat, mat.size(), mat[0].size(), 1) == 9);
+    n = (int)mat.size();
+    m = (int)mat[0].size();
+    CHECK(shortestPath(mat, n, m, k) == 13);
+    k = 1;
+    CHECK(shortestPath(mat, n, m, k) == 9);
 
     try
     {
@@ -55,7 +56,9 @@ TEST_CASE("shortest_path_by_removing_k")
             }
         }
         big_testcase.close();
-        CHECK(shortestPath(matt, matt.size(), matt[0].size(), k_new) == 45);
+        n = (int)matt.size();
+        m = (int)matt[0].size();
+        CHECK(shortestPath(matt, n, m, k_new) == 45);
     }
     catch (const std::exception& e)
     {
