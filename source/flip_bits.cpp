@@ -8,8 +8,7 @@
  * @copyright Copyright (c) 2022
  *
  */
-
-#include "flip_bits/flip_bits.h"
+#include <flip_bits/flip_bits.h>
 
 /**
  * @brief Given an array arr[] consisting of 0’s and 1’s. A flip operation is one in which you turn
@@ -30,7 +29,8 @@
  * Explanation:
  * We can perform a flip operation in the range [1,2]
  * After flip operation array is : [ 1 1 1 1 0 ]
- * Count of one's after fliping is : 4
+ * Count of one after fliping is : 4
+ * [Note: the subarray marked in bold is the flipped subarray]
  * ```
  *
  * ### Example 2
@@ -45,9 +45,8 @@
  * We can perform a flip operation in the range [1,5]
  * After flip operation array is : [ 1 1 1 0 1 1 1]
  * Count of one after fliping is : 6
+ * [Note: the subarray marked in bold is the flipped subarray]
  * ```
- * Algorithm:
- * Count the number of 0's in the array.
  *
  * @param arr
  * @param n

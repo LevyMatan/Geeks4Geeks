@@ -11,8 +11,7 @@
 
 /**
  * @brief find the catalan number of n
- *
- * @algorithm This solution is based on the recursive formula of catalan number
+ * This solution is based on the recursive formula of catalan number
  * @param n
  * @return int
  */
@@ -29,8 +28,7 @@ int find_catalan_recursive(int n)
 
 /**
  * @brief find the catalan number of n
- *
- * @algorithm This solution is based on the formula of catalan number
+ * This solution is based on the formula of catalan number
  * @param n
  * @return int
  */

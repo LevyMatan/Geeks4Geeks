@@ -1,5 +1,5 @@
 /**
- * @file shretest_path_remove_k.cpp
+ * @file shortest_path_by_removing_k.cpp
  * @author Matan Levy (levymatanlevy@gmail.com)
  * @brief
  * @version 0.1

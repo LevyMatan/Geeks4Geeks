@@ -84,11 +84,11 @@ namespace add_binary_strings
     }
 
     /**
-     * @brief
+     * @brief Compute the some of A and B when represented as binary strings.
      *
-     * @param A
-     * @param B
-     * @return std::string
+     * @param A string representing a binary number, only holds chars of '0's and '1's
+     * @param B string representing a binary number, only holds chars of '0's and '1's
+     * @return string representing the sum of A and B
      */
     std::string add_binary(std::string A, std::string B)
     {
