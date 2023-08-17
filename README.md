@@ -8,6 +8,32 @@
 [![codecov](https://codecov.io/gh/LevyMatan/Geeks4Geeks/branch/master/graph/badge.svg)](https://codecov.io/gh/LevyMatan/Geeks4Geeks)
 
 Here are a bunch of coding question solutions.
+
+## Catalan Number
+
+Given a number N. The task is to find the Nth catalan number.
+The first few Catalan numbers for N = 0, 1, 2, 3, … are 1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862, …
+
+Catalan Number for N is equal to the number of expressions containing N pairs of paranthesis that are correct matched, i.e., for each of the N '(' there exist N ')' on there right and vice versa.
+
+Since answer can be huge return answer modulo 1e9+7.
+
+### Example 1
+
+```txt
+Input:
+N = 5
+Output: 42
+```
+
+### Example 2
+
+```txt
+Input:
+N = 4
+Output: 14
+```
+
 ## Flip Bits
 
 Given an array A[] consisting of 0’s and 1’s. A flip operation is one in which you turn 1 into 0 and a 0 into 1. You have to do at most one “Flip” operation of any subarray. Formally, select a range (l, r) in the array A[], such that (0 ≤ l ≤ r < n) holds and flip the elements in this range to get the maximum ones in the final array. You can possibly make zero operations to get the answer.
