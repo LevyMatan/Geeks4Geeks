@@ -124,6 +124,8 @@ def make_directories(module_name):
     module_name = '../include/' + module_name
     if not os.path.exists(module_name):
         os.makedirs(module_name)
+    else:
+        print('The module directory already exists.')
 
 
 def create_header_file(module_name):
@@ -146,6 +148,8 @@ def create_header_file(module_name):
             header_file.write('*\n')
             header_file.write('*\n')
             header_file.write('*/\n')
+    else:
+        print('The header file already exists.')
 
 
 def create_source_file(module_name):
@@ -167,8 +171,10 @@ def create_source_file(module_name):
             source_file.write('*\n')
             source_file.write('*\n')
             source_file.write('*/\n')
-            source_file.write('#include "' + module_name + '.h"\n')
+            source_file.write('#include <' + module_name + '/' + module_name + '.h>\n')
             source_file.write('\n')
+    else:
+        print('The source file already exists.')
 
 def create_test_file(module_name):
     '''
@@ -189,8 +195,10 @@ def create_test_file(module_name):
             test_file.write('*\n')
             test_file.write('*/\n')
             test_file.write('#include <doctest/doctest.h>\n')
-            test_file.write('#include "' + module_name + '.h"\n')
+            test_file.write('#include <' + module_name + '/' + module_name + '.h>\n')
             test_file.write('\n')
+    else:
+        print('The test file already exists.')
 
 
 if __name__ == '__main__':
