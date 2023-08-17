@@ -1,13 +1,13 @@
 /**
-* @file catalan_number.cpp
-* @brief
-* @version 0.1
-* @date 2023-08-17
-*
-*
-*/
-#include <doctest/doctest.h>
+ * @file catalan_number.cpp
+ * @brief
+ * @version 0.1
+ * @date 2023-08-17
+ *
+ *
+ */
 #include <catalan_number/catalan_number.h>
+#include <doctest/doctest.h>
 
 TEST_CASE("Catalan Number Recursive Test")
 {
@@ -26,7 +26,6 @@ TEST_CASE("Catalan Number Recursive Test")
     n = 15;
     res = find_catalan_recursive(n);
     CHECK(res == 9694845);
-
 }
 
 TEST_CASE("Catalan Number")
@@ -46,5 +45,4 @@ TEST_CASE("Catalan Number")
     n = 15;
     res = find_catalan(n);
     CHECK(res == 9694845);
-
 }

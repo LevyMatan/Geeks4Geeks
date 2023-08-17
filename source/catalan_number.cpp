@@ -1,25 +1,24 @@
 /**
-* @file catalan_number.cpp
-* @author Matan Levy (levymatanlevy@gmail.com)
-* @brief
-* @version 0.1
-* @date 2023-08-17
-*
-*
-*/
+ * @file catalan_number.cpp
+ * @author Matan Levy (levymatanlevy@gmail.com)
+ * @brief
+ * @version 0.1
+ * @date 2023-08-17
+ *
+ *
+ */
 #include <catalan_number/catalan_number.h>
 
 /**
  * @brief find the catalan number of n
- * 
+ *
  * @algorithm This solution is based on the recursive formula of catalan number
  * @param n
  * @return int
-*/
+ */
 int find_catalan_recursive(int n)
 {
-    if (n <= 1)
-        return 1;
+    if (n <= 1) return 1;
 
     int res = 0;
     for (int i = 0; i < n; i++)
@@ -30,11 +29,11 @@ int find_catalan_recursive(int n)
 
 /**
  * @brief find the catalan number of n
- * 
+ *
  * @algorithm This solution is based on the formula of catalan number
  * @param n
  * @return int
-*/
+ */
 int find_catalan(int n)
 {
     long long int* a_catalan = new long long int[n + 1];
@@ -44,7 +43,8 @@ int find_catalan(int n)
     {
         a_catalan[i] = 0;
         for (int j = 0; j < i; j++)
-            a_catalan[i] = (a_catalan[i] + (a_catalan[j] * a_catalan[i - j - 1]) % 1000000007) % 1000000007;
+            a_catalan[i]
+                = (a_catalan[i] + (a_catalan[j] * a_catalan[i - j - 1]) % 1000000007) % 1000000007;
     }
 
     int res = a_catalan[n];
