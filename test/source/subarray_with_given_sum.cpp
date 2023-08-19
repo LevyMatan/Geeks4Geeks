@@ -1,14 +1,13 @@
 /**
-* @file subarray_with_given_sum.cpp
-* @brief
-* @version 0.1
-* @date 2023-08-19
-*
-*
-*/
+ * @file subarray_with_given_sum.cpp
+ * @brief
+ * @version 0.1
+ * @date 2023-08-19
+ *
+ *
+ */
 #include <doctest/doctest.h>
 #include <subarray_with_given_sum/subarray_with_given_sum.h>
-
 
 TEST_CASE("subarray_with_given_sum")
 {
