@@ -1,11 +1,11 @@
 /**
-* @file number_of_occurrences.cpp
-* @brief
-* @version 0.1
-* @date 2023-08-20
-*
-*
-*/
+ * @file number_of_occurrences.cpp
+ * @brief
+ * @version 0.1
+ * @date 2023-08-20
+ *
+ *
+ */
 #include <doctest/doctest.h>
 #include <number_of_occurrences/number_of_occurrences.h>
 
