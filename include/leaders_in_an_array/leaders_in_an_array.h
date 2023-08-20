@@ -37,7 +37,8 @@
 
 /**
  * @brief Givan an array of positive integers, returns the leaders in the array.
- *        An element of array is leader if it is greater than or equal to all the elements to its right side.
+ *        An element of array is leader if it is greater than or equal to all the elements to its
+ * right side.
  *
  * @param a Array of positive integers
  * @param n Number of elements in the array

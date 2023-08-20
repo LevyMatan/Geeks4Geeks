@@ -1,11 +1,11 @@
 /**
-* @file leaders_in_an_array.cpp
-* @brief
-* @version 0.1
-* @date 2023-08-19
-*
-*
-*/
+ * @file leaders_in_an_array.cpp
+ * @brief
+ * @version 0.1
+ * @date 2023-08-19
+ *
+ *
+ */
 #include <doctest/doctest.h>
 #include <leaders_in_an_array/leaders_in_an_array.h>
 
@@ -69,6 +69,4 @@ TEST_CASE("leaders_in_an_array")
     CHECK_EQ(leaders_arr[2], 3);
     CHECK_EQ(leaders_arr[3], 2);
     CHECK_EQ(leaders_arr[4], 1);
-
-
 }
