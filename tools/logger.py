@@ -1,41 +1,66 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidget, QTableWidgetItem, QHeaderView, QCheckBox, QVBoxLayout, QHBoxLayout, QWidget, QLabel
-from PyQt5.QtCore import Qt, QTimer
+'''
+logger.py is a tool that displays logs in a table format.
+It reads logs from a file and displays them in a table.
+It also allows the user to filter the logs by column and value.
+'''
+
 import sys
-import time
+from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidget, QTableWidgetItem
+from PyQt5.QtWidgets import QHeaderView, QCheckBox, QVBoxLayout, QHBoxLayout, QWidget, QLabel
+from PyQt5.QtCore import Qt, QTimer
+
 
 class LogConfig:
+    '''
+    LogConfig is a class that reads a config file and stores the log configuration.
+    '''
+
     def __init__(self, config_file_path):
         self.ignored_columns_filters = ["Time Stamp", "Line", "Message"]
         self.columns = []
         self.seperator_char = ','
-        with open(config_file_path, 'r') as f:
-            for line in f.readlines():
+        with open(config_file_path, 'r', encoding='utf-8') as config_file_handle:
+            for line in config_file_handle.readlines():
                 line = line.strip()
                 if line.startswith('seperator'):
                     self.seperator_char = line.split('=')[1].strip()
                 elif line.startswith('columns'):
-                    self.columns = [column.strip() for column in line.split('=')[1].split(self.seperator_char)]
+                    self.columns = [column.strip() for column in line.split('=')[
+                        1].split(self.seperator_char)]
 
     def __getitem__(self, index):
         return self.columns[index]
+
     def __len__(self):
         return len(self.columns)
+
     def __str__(self) -> str:
         return_str = 'Log Config:\n'
         return_str += f'seperator = {self.seperator_char}\n'
-        return_str += f'columns=\n'
+        return_str += 'columns=\n'
         for ind, column in enumerate(self.columns):
             return_str += f'\t{ind}) {column}\n'
         return return_str
 
+
 class Logger(QMainWindow):
+    '''
+    Logger is a class that displays logs in a table format.
+    '''
+
     def __init__(self, log_file, log_config_path):
         super().__init__()
         self.log_file = log_file
+
         # Initialize UI
         self.setWindowTitle('Logger')
         self.table = QTableWidget()
         self.setCentralWidget(self.table)
+        self.sidebar = QWidget()
+        self.sidebar_layout = QVBoxLayout()
+        self.sidebar_label = QLabel('Filters')
+
+        # Initialize Variables
         self.log_config = LogConfig(log_config_path)
         print(self.log_config)
         self.filters = {}
@@ -45,7 +70,7 @@ class Logger(QMainWindow):
         self.logs = []
 
         # Load logs from file
-        self.updateLogs()
+        self.update_logs()
 
         # Set up table display
         self.table.setColumnCount(len(self.log_config))
@@ -61,48 +86,35 @@ class Logger(QMainWindow):
         # 2. Filter by which value to filter
 
         # Initialize filters
-        self.initializeFilters()
+        self.initialize_filters()
 
         # Start timer to update logs
         self.timer = QTimer()
-        self.timer.timeout.connect(self.updateLogs)
+        self.timer.timeout.connect(self.update_logs)
         self.timer.start(1000)
 
-    def initializeSidebar(self):
+    def initialize_sidebar(self):
+        '''
+        Initialize sidebar.
+        '''
+
         # Create sidebar
-        self.sidebar = QWidget()
-        self.sidebar_layout = QVBoxLayout()
         self.sidebar.setLayout(self.sidebar_layout)
         self.sidebar.setFixedWidth(200)
         self.sidebar.setContentsMargins(0, 0, 0, 0)
-        self.sidebar.setStyleSheet('background-color: #1e1e1e; border-right: 1px solid #d0d0d0;')
-        self.sidebar_label = QLabel('Filters')
+        self.sidebar.setStyleSheet(
+            'background-color: #1e1e1e; border-right: 1px solid #d0d0d0;')
         self.sidebar_label.setAlignment(Qt.AlignCenter)
         self.sidebar_label.setStyleSheet('font-weight: bold;')
         self.sidebar_layout.addWidget(self.sidebar_label)
 
-    def updateSidebar(self):
-        # self.sidebar.deleteLater()
-        self.initializeSidebar()
-        time.sleep(2.1)
-        print("updateSidebar")
-        # for j, column in enumerate(self.log_config.columns):
-        #     checkbox = self.columns_filters[column]
-        #     self.sidebar_layout.addWidget(checkbox)
-
-        # for column, filter_dict in self.filters.items():
-        #     if not self.columns_filters[column].isChecked():
-        #         continue
-        #     column_label = QLabel(column)
-        #     column_label.setStyleSheet('font-weight: bold;')
-        #     self.sidebar_layout.addWidget(column_label)
-        #     for value, checkbox in filter_dict.items():
-        #         self.sidebar_layout.addWidget(checkbox)
-
-    def initializeFilters(self):
+    def initialize_filters(self):
+        '''
+        Initialize filters.
+        '''
 
         # Create sidebar
-        self.initializeSidebar()
+        self.initialize_sidebar()
 
         # Choose by which column to create a filter
         self.columns_filters = {}
@@ -111,7 +123,7 @@ class Logger(QMainWindow):
             checkbox.setChecked(True)
             if column in self.log_config.ignored_columns_filters:
                 checkbox.setChecked(False)
-            checkbox.stateChanged.connect(self.filterLogs)
+            checkbox.stateChanged.connect(self.filter_logs)
             self.columns_filters[column] = checkbox
             self.sidebar_layout.addWidget(checkbox)
 
@@ -124,7 +136,7 @@ class Logger(QMainWindow):
                     checkbox.setStyleSheet('background-color: #1e1e1e;')
                     checkbox = QCheckBox(value)
                     checkbox.setChecked(True)
-                    checkbox.stateChanged.connect(self.filterLogs)
+                    checkbox.stateChanged.connect(self.filter_logs)
                     self.filters[column][value] = checkbox
 
         for column, filter_dict in self.filters.items():
@@ -144,16 +156,19 @@ class Logger(QMainWindow):
         self.main_widget.setLayout(self.main_layout)
         self.setCentralWidget(self.main_widget)
 
-    def updateLogs(self):
+    def update_logs(self):
+        '''
+        Update logs from file and display them on the table.
+        '''
         # Load new logs from file
         # read only from last file end position
-        with open(self.log_file, 'r') as f:
+        with open(self.log_file, 'r', encoding='utf-8') as log_file_handle:
             # Move to last file end position
-            f.seek(self.log_file_pos, 0)
+            log_file_handle.seek(self.log_file_pos, 0)
             # Read new logs
-            new_logs = f.readlines()
+            new_logs = log_file_handle.readlines()
             # Save end of file position
-            self.log_file_pos = f.tell()
+            self.log_file_pos = log_file_handle.tell()
         new_logs = [log.strip().split(self.seperator_char) for log in new_logs]
         self.logs += new_logs
 
@@ -164,16 +179,24 @@ class Logger(QMainWindow):
         # Update table display
         self.table.setRowCount(len(self.logs))
         for i, log in enumerate(self.logs):
+            if len(log) != len(self.log_config):
+                continue
             for j, column in enumerate(self.log_config.columns):
+                if column == 'File Origin':
+                    # Only display file name
+                    log[j] = log[j].split('/')[-1]
                 item = QTableWidgetItem(log[j])
                 self.table.setItem(i, j, item)
             if self.filters:
-                self.applyFilters(i, log)
+                self.apply_filters(i, log)
         # Scroll to bottom if user is not looking at a specific part of the logger
         if self.table.verticalScrollBar().value() == self.table.verticalScrollBar().maximum():
             self.table.scrollToBottom()
 
-    def applyFilters(self, i, log):
+    def apply_filters(self, i, log):
+        '''
+        Apply filters to log.
+        '''
         visible = True
         for j, column in enumerate(self.log_config):
             if not self.columns_filters[column].isChecked():
@@ -183,13 +206,17 @@ class Logger(QMainWindow):
                 visible = False
         self.table.setRowHidden(i, not visible)
 
-    def filterLogs(self):
+    def filter_logs(self):
+        '''
+        Filter logs based on checkbox selection.
+        '''
         # Filter logs based on checkbox selection
         for i, log in enumerate(self.logs):
-            self.applyFilters(i, log)
+            self.apply_filters(i, log)
+
 
 if __name__ == '__main__':
-    app = QApplication(sys.argv)
+    app = QApplication([])
     logger = Logger('log.txt', "config_file.txt")
     logger.show()
     sys.exit(app.exec_())
