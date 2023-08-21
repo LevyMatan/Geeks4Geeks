@@ -75,7 +75,8 @@ class Logger(QMainWindow):
         # Set up table display
         self.table.setColumnCount(len(self.log_config))
         self.table.setHorizontalHeaderLabels(self.log_config.columns)
-        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Interactive)
         self.table.verticalHeader().setVisible(False)
         self.table.setEditTriggers(QTableWidget.NoEditTriggers)
         self.table.setSelectionBehavior(QTableWidget.SelectRows)
