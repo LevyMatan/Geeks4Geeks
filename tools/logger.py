@@ -5,8 +5,9 @@ It also allows the user to filter the logs by column and value.
 '''
 
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidget, QTableWidgetItem
-from PyQt5.QtWidgets import QHeaderView, QCheckBox, QVBoxLayout, QHBoxLayout, QWidget, QLabel
+from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidget, QTableWidgetItem, QScrollArea
+from PyQt5.QtWidgets import QHeaderView, QCheckBox, QVBoxLayout, QHBoxLayout, QWidget, QLabel, QLineEdit
+from PyQt5.QtGui import QColor
 from PyQt5.QtCore import Qt, QTimer
 
 
@@ -59,6 +60,9 @@ class Logger(QMainWindow):
         self.sidebar = QWidget()
         self.sidebar_layout = QVBoxLayout()
         self.sidebar_label = QLabel('Filters')
+        self.scroll_area = QScrollArea()
+        self.search_box = QLineEdit()
+        self.search_query = ''
 
         # Initialize Variables
         self.log_config = LogConfig(log_config_path)
@@ -99,13 +103,18 @@ class Logger(QMainWindow):
         Initialize sidebar.
         '''
 
+        # Add search box
+        self.search_box.setPlaceholderText('Search...')
+        self.search_box.returnPressed.connect(self.search_logs)
+        self.sidebar_layout.addWidget(self.search_box)
+
         # Create sidebar
         self.sidebar.setLayout(self.sidebar_layout)
-        self.sidebar.setFixedWidth(200)
+        # self.sidebar.setFixedWidth(200)
         self.sidebar.setContentsMargins(0, 0, 0, 0)
         self.sidebar.setStyleSheet(
-            'background-color: #FFFFFF; border-right: 1px solid #d0d0d0;')
-        self.sidebar_label.setAlignment(Qt.AlignCenter)
+            'background-color: #76B900; border-right: 1px solid #d0d0d0;')
+        # self.sidebar_label.setAlignment(Qt.AlignCenter)
         self.sidebar_label.setStyleSheet('font-weight: bold;')
         self.sidebar_layout.addWidget(self.sidebar_label)
 
@@ -134,7 +143,7 @@ class Logger(QMainWindow):
                 values = set([log[j] for log in self.logs])
                 self.filters[column] = {}
                 for value in values:
-                    checkbox.setStyleSheet('background-color: #FFFFFF;')
+                    checkbox.setStyleSheet('background-color: #76B900;')
                     checkbox = QCheckBox(value)
                     checkbox.setChecked(True)
                     checkbox.stateChanged.connect(self.filter_logs)
@@ -150,10 +159,18 @@ class Logger(QMainWindow):
                 self.sidebar_layout.addWidget(checkbox)
 
         # Add sidebar to main window
+
+        self.scroll_area.setWidgetResizable(True)
+        self.scroll_area.setWidget(self.sidebar)
+        self.scroll_area.horizontalScrollBar().setStyleSheet("QScrollBar {height:0px;}")
+        self.scroll_area.verticalScrollBar().setStyleSheet("QScrollBar {width:0px;}")
+        self.scroll_area.setStyleSheet('background-color: #1e1e1e; border-right: 1px solid #d0d0d0;')
+        self.scroll_area.verticalScrollBar().setStyleSheet('background-color: #d0d0d0;')
+        self.scroll_area.horizontalScrollBar().setStyleSheet('background-color: #d0d0d0;')
         self.main_widget = QWidget()
         self.main_layout = QHBoxLayout()
         self.main_layout.addWidget(self.table)
-        self.main_layout.addWidget(self.sidebar)
+        self.main_layout.addWidget(self.scroll_area)
         self.main_widget.setLayout(self.main_layout)
         self.setCentralWidget(self.main_widget)
 
@@ -188,6 +205,8 @@ class Logger(QMainWindow):
                     log[j] = log[j].split('/')[-1]
                 item = QTableWidgetItem(log[j])
                 self.table.setItem(i, j, item)
+                # Apply highlight to search query
+                self.apply_highlight(item)
             if self.filters:
                 self.apply_filters(i, log)
         # Scroll to bottom if user is not looking at a specific part of the logger
@@ -215,6 +234,25 @@ class Logger(QMainWindow):
         for i, log in enumerate(self.logs):
             self.apply_filters(i, log)
 
+    def apply_highlight(self, item):
+        '''
+        Apply highlight to search query.
+        '''
+        if self.search_query and item and self.search_query.lower() in item.text().lower():
+            item.setBackground(QColor('#f1e740'))
+        else:
+            item.setBackground(QColor('#3e3e42'))
+
+    def search_logs(self):
+        '''
+        Search logs based on search query.
+        '''
+        # Search logs based on search query
+        self.search_query = self.search_box.text()
+        for i in range(self.table.rowCount()):
+            for j in range(self.table.columnCount()):
+                item = self.table.item(i, j)
+                self.apply_highlight(item)
 
 if __name__ == '__main__':
     app = QApplication([])
