@@ -1,7 +1,11 @@
+'''
+gen_logs generates random log entries and writes them to a file.
+It is to test the logger.
+'''
 import time
 import random
 
-log_file = 'log.txt'
+LOG_FILE = 'log.txt'
 log_levels = ['INFO', 'WARNING', 'ERROR']
 log_messages = ['Something happened', 'Something went wrong', 'Something broke']
 log_origin = ['main', 'logger', 'tools']
@@ -16,7 +20,7 @@ while True:
     log_entry = f'{timestamp}|{origin}|{line_number}|{level}|{message}\n'
 
     # Write log entry to file
-    with open(log_file, 'a') as f:
+    with open(LOG_FILE, 'a', encoding='utf-8' ) as f:
         f.write(log_entry)
 
     # Wait for random amount of time before generating next log entry
