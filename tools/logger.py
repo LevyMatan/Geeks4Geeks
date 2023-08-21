@@ -104,7 +104,7 @@ class Logger(QMainWindow):
         self.sidebar.setFixedWidth(200)
         self.sidebar.setContentsMargins(0, 0, 0, 0)
         self.sidebar.setStyleSheet(
-            'background-color: #1e1e1e; border-right: 1px solid #d0d0d0;')
+            'background-color: #FFFFFF; border-right: 1px solid #d0d0d0;')
         self.sidebar_label.setAlignment(Qt.AlignCenter)
         self.sidebar_label.setStyleSheet('font-weight: bold;')
         self.sidebar_layout.addWidget(self.sidebar_label)
@@ -134,7 +134,7 @@ class Logger(QMainWindow):
                 values = set([log[j] for log in self.logs])
                 self.filters[column] = {}
                 for value in values:
-                    checkbox.setStyleSheet('background-color: #1e1e1e;')
+                    checkbox.setStyleSheet('background-color: #FFFFFF;')
                     checkbox = QCheckBox(value)
                     checkbox.setChecked(True)
                     checkbox.stateChanged.connect(self.filter_logs)
