@@ -1,0 +1,2 @@
+seperator=|
+columns=Time Stamp|Origin File|Line|Message Type|Message
