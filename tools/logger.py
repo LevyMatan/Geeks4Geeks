@@ -6,9 +6,9 @@ It also allows the user to filter the logs by column and value.
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidget, QTableWidgetItem
 from PyQt5.QtWidgets import QHeaderView, QCheckBox, QVBoxLayout, QHBoxLayout, QWidget, QLabel
-from PyQt5.QtWidgets import QLineEdit, QScrollArea, QPushButton, QColorDialog
+from PyQt5.QtWidgets import QLineEdit, QScrollArea, QPushButton, QColorDialog, QSplitter
 from PyQt5.QtGui import QColor
-from PyQt5.QtCore import QTimer
+from PyQt5.QtCore import QTimer, Qt
 
 class LogConfig:
     '''
@@ -51,13 +51,15 @@ class Highlighter:
         self.action_function = action_function
 
         self.layout = QHBoxLayout()
+
         self.highlight_box = QLineEdit()
         self.highlight_box.setPlaceholderText(self.text)
+        self.highlight_box.returnPressed.connect(self.set_highlight_text)
+
         self.color_picker_button = QPushButton('')
         self.color_picker_button.setFixedSize(20, 20)
         self.color_picker_button.setStyleSheet('background-color: {self.color};')
         self.color_picker_button.clicked.connect(self.set_color_picker)
-        self.highlight_box.returnPressed.connect(self.set_highlight_text)
 
         self.layout.addWidget(self.highlight_box)
         self.layout.addWidget(self.color_picker_button)
@@ -89,6 +91,12 @@ class Highlighter:
         '''
         self.text = text
 
+    def update_button_color(self):
+        '''
+        Update color picker button color.
+        '''
+        self.color_picker_button.setStyleSheet(f'background-color: {self.color};')
+
     def set_color_picker(self):
         '''
         Show color picker dialog.
@@ -98,7 +106,7 @@ class Highlighter:
         color = QColorDialog.getColor()
         if color.isValid():
             self.color = color.name()
-            self.color_picker_button.setStyleSheet(f'background-color: {color.name()};')
+            self.update_button_color()
 
     def set_highlight_text(self):
         '''
@@ -120,12 +128,12 @@ class Logger(QMainWindow):
 
     def __init__(self, log_file, log_config_path):
         super().__init__()
+        self.resize(1000, 600)
         self.log_file = log_file
 
         # Initialize UI
         self.setWindowTitle('Logger')
         self.table = QTableWidget()
-        self.setCentralWidget(self.table)
         self.sidebar = QWidget()
         self.scroll_area = QScrollArea()
 
@@ -137,7 +145,8 @@ class Logger(QMainWindow):
         self.num_of_logs = 0
         self.log_file_pos = 0
         self.logs = []
-
+        self.double_click_color = '#76B900'
+        self.double_click_text = ''
         # Load logs from file
         self.update_logs()
 
@@ -145,11 +154,14 @@ class Logger(QMainWindow):
         self.table.setColumnCount(len(self.log_config))
         self.table.setHorizontalHeaderLabels(self.log_config.columns)
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        # self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Interactive)
+        self.table.horizontalHeader().setStretchLastSection(True)
         self.table.verticalHeader().setVisible(False)
         self.table.setEditTriggers(QTableWidget.NoEditTriggers)
         self.table.setSelectionBehavior(QTableWidget.SelectRows)
         self.table.setSelectionMode(QTableWidget.SingleSelection)
+        self.table.cellDoubleClicked.connect(self.on_cell_double_clicked)
 
         # Initialize filters
         self.initialize_filters()
@@ -165,17 +177,31 @@ class Logger(QMainWindow):
         '''
         # Create sidebar
         sidebar_layout = QVBoxLayout()
-        sidebar_label = QLabel('Filters')
-
-        self.sidebar.highlighter = Highlighter(action_function=self.highlight_logs)
-        sidebar_layout.addLayout(self.sidebar.highlighter.get_layout())
-
-        sidebar_label.setStyleSheet('font-weight: bold;')
         self.sidebar.setContentsMargins(0, 0, 0, 0)
         self.sidebar.setStyleSheet(
             'background-color: #76B900; border-right: 1px solid #d0d0d0;')
+
+        # Create clear logs button
+        clear_logs_button = QPushButton('Clear Logs')
+        clear_logs_button.clicked.connect(self.clear_logs)
+        sidebar_layout.addWidget(clear_logs_button)
+
+        # Create highlighter
+        highlighter_label = QLabel('Highlight Logs')
+        highlighter_label.setStyleSheet('font-weight: bold;')
+        sidebar_layout.addWidget(highlighter_label)
+        self.sidebar.highlighter = Highlighter(action_function=self.highlight_logs)
+        sidebar_layout.addLayout(self.sidebar.highlighter.get_layout())
+
+        # Create sidebar label
+        sidebar_label = QLabel('Filter Logs')
+        sidebar_label.setStyleSheet('font-weight: bold;')
         sidebar_layout.addWidget(sidebar_label)
+
+
+        # Set sidebar layout
         self.sidebar.setLayout(sidebar_layout)
+        self.sidebar.highlighter.update_button_color()
 
     def initialize_filters(self):
         '''
@@ -205,7 +231,6 @@ class Logger(QMainWindow):
                 values = {log[j] for log in self.logs}
                 self.filters[column] = {}
                 for value in values:
-                    checkbox.setStyleSheet('background-color: #76B900;')
                     checkbox = QCheckBox(value)
                     checkbox.setChecked(True)
                     checkbox.stateChanged.connect(self.filter_logs)
@@ -222,22 +247,23 @@ class Logger(QMainWindow):
 
         # Add sidebar to main window
         self.scroll_area.setWidgetResizable(True)
-        self.scroll_area.setWidget(self.sidebar)
+        self.scroll_area.setStyleSheet(
+            'background-color: #FFFFFF; border-right: 1px solid #d0d0d0;')
         self.scroll_area.horizontalScrollBar().setStyleSheet(
             "QScrollBar {height:0px;}")
         self.scroll_area.verticalScrollBar().setStyleSheet(
             "QScrollBar {width:0px;}")
-        self.scroll_area.setStyleSheet(
-            'background-color: #1e1e1e; border-right: 1px solid #d0d0d0;')
         self.scroll_area.verticalScrollBar().setStyleSheet('background-color: #d0d0d0;')
         self.scroll_area.horizontalScrollBar().setStyleSheet('background-color: #d0d0d0;')
+        self.scroll_area.setWidget(self.sidebar)
 
-        self.main_widget = QWidget()
-        self.main_layout = QHBoxLayout()
-        self.main_layout.addWidget(self.table)
-        self.main_layout.addWidget(self.scroll_area)
-        self.main_widget.setLayout(self.main_layout)
+        self.main_widget = QSplitter(Qt.Horizontal)
+        # self.main_layout = QHBoxLayout()
+        self.main_widget.addWidget(self.table)
+        self.main_widget.addWidget(self.scroll_area)
+        # self.main_widget.setLayout(self.main_layout)
         self.setCentralWidget(self.main_widget)
+        self.main_widget.setSizes([int(self.width() * 0.75), int(self.width() * 0.25)])
 
     def update_logs(self):
         '''
@@ -313,10 +339,22 @@ class Logger(QMainWindow):
         '''
         Apply highlight to row if search query is found.
         '''
-        if highlight_query and item and highlight_query.lower() in item.text().lower():
-            item.setBackground(QColor(highlight_color))
+        def find_index_of_target_string(strings, target):
+            for i, search_str in enumerate(strings):
+                if search_str and search_str.lower() in target:
+                    return i
+            return None
+
+        highlight_query = [self.double_click_text, highlight_query]
+        highlight_color = [self.double_click_color, highlight_color]
+
+        if item is None:
+            return
+        ind = find_index_of_target_string(highlight_query, item.text().lower())
+        if ind is not None:
+            item.setBackground(QColor(highlight_color[ind]))
         else:
-            item.setBackground(QColor('#3e3e42'))
+            item.setBackground(QColor('#FFFFFF'))
 
     def highlight_logs(self, text, color):
         '''
@@ -328,6 +366,33 @@ class Logger(QMainWindow):
                 item = self.table.item(i, j)
                 self.apply_highlight_to_table_cell(item, text, color)
 
+    def on_cell_double_clicked(self, row, column):
+        '''
+        Highlight logs based on cell clicked.
+        '''
+        item = self.table.item(row, column)
+        if item is None:
+            return
+        # Set the old value to white
+        self.double_click_color = '#FFFFFF'
+        self.highlight_logs(self.double_click_text, self.double_click_color)
+
+        self.double_click_color = '#76B900'
+        # Now, if the value is the same as before, set the text to empty
+        if self.double_click_text == item.text():
+            self.double_click_text = ''
+        else:
+            self.double_click_text = item.text()
+            self.highlight_logs(self.double_click_text, self.double_click_color)
+
+    def clear_logs(self):
+        '''
+        Clear logs from table.
+        '''
+        self.logs = []
+        self.num_of_logs = 0
+        self.setWindowTitle(f'Logger ({self.num_of_logs} logs)')
+        self.table.setRowCount(0)
 
 if __name__ == '__main__':
     app = QApplication([])
