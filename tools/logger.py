@@ -3,25 +3,22 @@ logger.py is a tool that displays logs in a table format.
 It reads logs from a file and displays them in a table.
 It also allows the user to filter the logs by column and value.
 '''
-
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidget, QTableWidgetItem
 from PyQt5.QtWidgets import QHeaderView, QCheckBox, QVBoxLayout, QHBoxLayout, QWidget, QLabel
-from PyQt5.QtWidgets import QLineEdit, QScrollArea
+from PyQt5.QtWidgets import QLineEdit, QScrollArea, QPushButton, QColorDialog
 from PyQt5.QtGui import QColor
 from PyQt5.QtCore import QTimer
-
 
 class LogConfig:
     '''
     LogConfig is a class that reads a config file and stores the log configuration.
     '''
-
     def __init__(self, config_file_path):
         self.ignored_columns_filters = ["Time Stamp", "Line", "Message"]
         self.columns = []
         self.seperator_char = ','
-        with open(config_file_path, 'r', encoding='utf-8') as config_file_handle:
+        with open(config_file_path, encoding='utf-8') as config_file_handle:
             for line in config_file_handle.readlines():
                 line = line.strip()
                 if line.startswith('seperator'):
@@ -44,6 +41,77 @@ class LogConfig:
             return_str += f'\t{ind}) {column}\n'
         return return_str
 
+class Highlighter:
+    '''
+    Highlighter is a class that create a text box for user input and a color palate to choose from.
+    '''
+    def __init__(self, color='#ff9300', text='Highlight...', action_function=None):
+        self.color = color
+        self.text = text
+        self.action_function = action_function
+
+        self.layout = QHBoxLayout()
+        self.highlight_box = QLineEdit()
+        self.highlight_box.setPlaceholderText(self.text)
+        self.color_picker_button = QPushButton('')
+        self.color_picker_button.setFixedSize(20, 20)
+        self.color_picker_button.setStyleSheet('background-color: {self.color};')
+        self.color_picker_button.clicked.connect(self.set_color_picker)
+        self.highlight_box.returnPressed.connect(self.set_highlight_text)
+
+        self.layout.addWidget(self.highlight_box)
+        self.layout.addWidget(self.color_picker_button)
+
+    def __str__(self) -> str:
+        return f'color = {self.color}\ntext = {self.text}'
+
+    def get_color(self):
+        '''
+        Get highlight color.
+        '''
+        return self.color
+
+    def set_color(self, color):
+        '''
+        Set highlight color.
+        '''
+        self.color = color
+
+    def get_text(self):
+        '''
+        Get highlight text.
+        '''
+        return self.text
+
+    def set_text(self, text):
+        '''
+        Set highlight text.
+        '''
+        self.text = text
+
+    def set_color_picker(self):
+        '''
+        Show color picker dialog.
+        Update color picker button color.
+        Save color.
+        '''
+        color = QColorDialog.getColor()
+        if color.isValid():
+            self.color = color.name()
+            self.color_picker_button.setStyleSheet(f'background-color: {color.name()};')
+
+    def set_highlight_text(self):
+        '''
+        Save highlight text.
+        '''
+        self.text = self.highlight_box.text()
+        self.action_function(self.text, self.color)
+
+    def get_layout(self):
+        '''
+        Get layout.
+        '''
+        return self.layout
 
 class Logger(QMainWindow):
     '''
@@ -59,11 +127,7 @@ class Logger(QMainWindow):
         self.table = QTableWidget()
         self.setCentralWidget(self.table)
         self.sidebar = QWidget()
-        self.sidebar_layout = QVBoxLayout()
-        self.sidebar_label = QLabel('Filters')
         self.scroll_area = QScrollArea()
-        self.search_box = QLineEdit()
-        self.search_query = ''
 
         # Initialize Variables
         self.log_config = LogConfig(log_config_path)
@@ -87,10 +151,6 @@ class Logger(QMainWindow):
         self.table.setSelectionBehavior(QTableWidget.SelectRows)
         self.table.setSelectionMode(QTableWidget.SingleSelection)
 
-        # They are two hierarchies of filters:
-        # 1. Filter by which column to filter
-        # 2. Filter by which value to filter
-
         # Initialize filters
         self.initialize_filters()
 
@@ -103,45 +163,46 @@ class Logger(QMainWindow):
         '''
         Initialize sidebar.
         '''
-
-        # Add search box
-        self.search_box.setPlaceholderText('Search...')
-        self.search_box.returnPressed.connect(self.search_logs)
-        self.sidebar_layout.addWidget(self.search_box)
-
         # Create sidebar
-        self.sidebar.setLayout(self.sidebar_layout)
-        # self.sidebar.setFixedWidth(200)
+        sidebar_layout = QVBoxLayout()
+        sidebar_label = QLabel('Filters')
+
+        self.sidebar.highlighter = Highlighter(action_function=self.highlight_logs)
+        sidebar_layout.addLayout(self.sidebar.highlighter.get_layout())
+
+        sidebar_label.setStyleSheet('font-weight: bold;')
         self.sidebar.setContentsMargins(0, 0, 0, 0)
         self.sidebar.setStyleSheet(
             'background-color: #76B900; border-right: 1px solid #d0d0d0;')
-        # self.sidebar_label.setAlignment(Qt.AlignCenter)
-        self.sidebar_label.setStyleSheet('font-weight: bold;')
-        self.sidebar_layout.addWidget(self.sidebar_label)
+        sidebar_layout.addWidget(sidebar_label)
+        self.sidebar.setLayout(sidebar_layout)
 
     def initialize_filters(self):
         '''
         Initialize filters.
         '''
-
         # Create sidebar
         self.initialize_sidebar()
 
         # Choose by which column to create a filter
         self.columns_filters = {}
         for j, column in enumerate(self.log_config.columns):
+            if column in self.log_config.ignored_columns_filters:
+                continue
             checkbox = QCheckBox(column)
             checkbox.setChecked(True)
             if column in self.log_config.ignored_columns_filters:
                 checkbox.setChecked(False)
             checkbox.stateChanged.connect(self.filter_logs)
             self.columns_filters[column] = checkbox
-            self.sidebar_layout.addWidget(checkbox)
+            self.sidebar.layout().addWidget(checkbox)
 
         # Add filter checkboxes
         for j, column in enumerate(self.log_config.columns):
+            if column in self.log_config.ignored_columns_filters:
+                continue
             if self.columns_filters[column].isChecked():
-                values = set([log[j] for log in self.logs])
+                values = {log[j] for log in self.logs}
                 self.filters[column] = {}
                 for value in values:
                     checkbox.setStyleSheet('background-color: #76B900;')
@@ -155,12 +216,11 @@ class Logger(QMainWindow):
                 continue
             column_label = QLabel(column)
             column_label.setStyleSheet('font-weight: bold;')
-            self.sidebar_layout.addWidget(column_label)
+            self.sidebar.layout().addWidget(column_label)
             for value, checkbox in filter_dict.items():
-                self.sidebar_layout.addWidget(checkbox)
+                self.sidebar.layout().addWidget(checkbox)
 
         # Add sidebar to main window
-
         self.scroll_area.setWidgetResizable(True)
         self.scroll_area.setWidget(self.sidebar)
         self.scroll_area.horizontalScrollBar().setStyleSheet(
@@ -171,6 +231,7 @@ class Logger(QMainWindow):
             'background-color: #1e1e1e; border-right: 1px solid #d0d0d0;')
         self.scroll_area.verticalScrollBar().setStyleSheet('background-color: #d0d0d0;')
         self.scroll_area.horizontalScrollBar().setStyleSheet('background-color: #d0d0d0;')
+
         self.main_widget = QWidget()
         self.main_layout = QHBoxLayout()
         self.main_layout.addWidget(self.table)
@@ -182,15 +243,17 @@ class Logger(QMainWindow):
         '''
         Update logs from file and display them on the table.
         '''
-        # Load new logs from file
-        # read only from last file end position
-        with open(self.log_file, 'r', encoding='utf-8') as log_file_handle:
+        # Read only from last file end position
+        with open(self.log_file, encoding='utf-8') as log_file_handle:
             # Move to last file end position
             log_file_handle.seek(self.log_file_pos, 0)
             # Read new logs
             new_logs = log_file_handle.readlines()
             # Save end of file position
             self.log_file_pos = log_file_handle.tell()
+
+        # if new_logs == []:
+        #     return
         new_logs = [log.strip().split(self.seperator_char) for log in new_logs]
         self.logs += new_logs
 
@@ -210,7 +273,13 @@ class Logger(QMainWindow):
                 item = QTableWidgetItem(log[j])
                 self.table.setItem(i, j, item)
                 # Apply highlight to search query
-                self.apply_highlight(item)
+                try:
+                    text_query = self.sidebar.highlighter.get_text()
+                    highlight_color = self.sidebar.highlighter.get_color()
+                    self.apply_highlight_to_table_cell(item, text_query, highlight_color)
+                except(AttributeError):
+                    # If highlighter is not initialized yet
+                    pass
             if self.filters:
                 self.apply_filters(i, log)
         # Scroll to bottom if user is not looking at a specific part of the logger
@@ -223,6 +292,8 @@ class Logger(QMainWindow):
         '''
         visible = True
         for j, column in enumerate(self.log_config):
+            if column in self.log_config.ignored_columns_filters:
+                continue
             if not self.columns_filters[column].isChecked():
                 continue
             checkbox = self.filters[column][log[j]]
@@ -238,25 +309,24 @@ class Logger(QMainWindow):
         for i, log in enumerate(self.logs):
             self.apply_filters(i, log)
 
-    def apply_highlight(self, item):
+    def apply_highlight_to_table_cell(self, item, highlight_query, highlight_color):
         '''
-        Apply highlight to search query.
+        Apply highlight to row if search query is found.
         '''
-        if self.search_query and item and self.search_query.lower() in item.text().lower():
-            item.setBackground(QColor('#f1e740'))
+        if highlight_query and item and highlight_query.lower() in item.text().lower():
+            item.setBackground(QColor(highlight_color))
         else:
             item.setBackground(QColor('#3e3e42'))
 
-    def search_logs(self):
+    def highlight_logs(self, text, color):
         '''
-        Search logs based on search query.
+        Highlight logs based on search query.
         '''
         # Search logs based on search query
-        self.search_query = self.search_box.text()
         for i in range(self.table.rowCount()):
             for j in range(self.table.columnCount()):
                 item = self.table.item(i, j)
-                self.apply_highlight(item)
+                self.apply_highlight_to_table_cell(item, text, color)
 
 
 if __name__ == '__main__':
