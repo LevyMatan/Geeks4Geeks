@@ -5,10 +5,11 @@ It also allows the user to filter the logs by column and value.
 '''
 
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidget, QTableWidgetItem, QScrollArea
-from PyQt5.QtWidgets import QHeaderView, QCheckBox, QVBoxLayout, QHBoxLayout, QWidget, QLabel, QLineEdit
+from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidget, QTableWidgetItem
+from PyQt5.QtWidgets import QHeaderView, QCheckBox, QVBoxLayout, QHBoxLayout, QWidget, QLabel
+from PyQt5.QtWidgets import QLineEdit, QScrollArea
 from PyQt5.QtGui import QColor
-from PyQt5.QtCore import Qt, QTimer
+from PyQt5.QtCore import QTimer
 
 
 class LogConfig:
@@ -162,9 +163,12 @@ class Logger(QMainWindow):
 
         self.scroll_area.setWidgetResizable(True)
         self.scroll_area.setWidget(self.sidebar)
-        self.scroll_area.horizontalScrollBar().setStyleSheet("QScrollBar {height:0px;}")
-        self.scroll_area.verticalScrollBar().setStyleSheet("QScrollBar {width:0px;}")
-        self.scroll_area.setStyleSheet('background-color: #1e1e1e; border-right: 1px solid #d0d0d0;')
+        self.scroll_area.horizontalScrollBar().setStyleSheet(
+            "QScrollBar {height:0px;}")
+        self.scroll_area.verticalScrollBar().setStyleSheet(
+            "QScrollBar {width:0px;}")
+        self.scroll_area.setStyleSheet(
+            'background-color: #1e1e1e; border-right: 1px solid #d0d0d0;')
         self.scroll_area.verticalScrollBar().setStyleSheet('background-color: #d0d0d0;')
         self.scroll_area.horizontalScrollBar().setStyleSheet('background-color: #d0d0d0;')
         self.main_widget = QWidget()
@@ -253,6 +257,7 @@ class Logger(QMainWindow):
             for j in range(self.table.columnCount()):
                 item = self.table.item(i, j)
                 self.apply_highlight(item)
+
 
 if __name__ == '__main__':
     app = QApplication([])
