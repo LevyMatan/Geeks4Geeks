@@ -179,7 +179,7 @@ class Logger(QMainWindow):
         sidebar_layout = QVBoxLayout()
         self.sidebar.setContentsMargins(0, 0, 0, 0)
         self.sidebar.setStyleSheet(
-            'background-color: #76B900; border-right: 1px solid #d0d0d0;')
+            'background-color: #e8ffe4; border-right: 1px solid #d0d0d0;')
 
         # Create clear logs button
         clear_logs_button = QPushButton('Clear Logs')
@@ -280,7 +280,7 @@ class Logger(QMainWindow):
 
         # if new_logs == []:
         #     return
-        new_logs = [log.strip().split(self.seperator_char) for log in new_logs]
+        new_logs = [log.strip().split(self.seperator_char) for log in new_logs if log.count(self.log_config.seperator_char) == (len(self.log_config)-1)]
         self.logs += new_logs
 
         # Display number of logs on window title
@@ -293,7 +293,7 @@ class Logger(QMainWindow):
             if len(log) != len(self.log_config):
                 continue
             for j, column in enumerate(self.log_config.columns):
-                if column == 'File Origin':
+                if column == 'Origin File':
                     # Only display file name
                     log[j] = log[j].split('/')[-1]
                 item = QTableWidgetItem(log[j])
@@ -396,6 +396,6 @@ class Logger(QMainWindow):
 
 if __name__ == '__main__':
     app = QApplication([])
-    logger = Logger('log.txt', "config_file.txt")
+    logger = Logger('/swgwork/matanl/git/bash_scripts/fw_x86_p2212.log', '/swgwork/matanl/git/bash_scripts/config_file.txt')
     logger.show()
     sys.exit(app.exec_())
