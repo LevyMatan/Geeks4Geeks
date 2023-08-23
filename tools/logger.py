@@ -231,6 +231,7 @@ class Logger(QMainWindow):
             if column in self.log_config.ignored_columns_filters:
                 continue
             values = {log[j] for log in self.logs}
+            values = sorted(values)
             self.filters[column] = {}
             for value in values:
                 checkbox = QCheckBox(value)
