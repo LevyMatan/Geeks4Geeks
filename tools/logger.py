@@ -5,7 +5,7 @@ It also allows the user to filter the logs by column and value.
 '''
 import sys
 import argparse
-from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidget, QTableWidgetItem
+from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidget, QTableWidgetItem, QCompleter
 from PyQt5.QtWidgets import QHeaderView, QCheckBox, QVBoxLayout, QHBoxLayout, QWidget, QLabel
 from PyQt5.QtWidgets import QLineEdit, QScrollArea, QPushButton, QColorDialog, QSplitter, QComboBox
 from PyQt5.QtGui import QColor
@@ -245,6 +245,10 @@ class Logger(QMainWindow):
             filter_header_layout.addWidget(self.columns_filters[column])
             choose_function_dropdown = QComboBox()
             choose_function_dropdown.addItems(filter_dict.keys())
+            choose_function_dropdown.setEditable(True)
+            completer = QCompleter(filter_dict.keys())
+            choose_function_dropdown.setCompleter(completer)
+            choose_function_dropdown.activated[str].connect(lambda text, column=column : self.toggle_filter(text, column))
             filter_header_layout.addWidget(choose_function_dropdown)
             self.sidebar.layout().addLayout(filter_header_layout)
 
@@ -330,6 +334,13 @@ class Logger(QMainWindow):
             if not checkbox.isChecked():
                 visible = False
         self.table.setRowHidden(i, not visible)
+
+    def toggle_filter(self, text, column):
+        '''
+        Toggle filter checkbox.
+        '''
+        print (text, column)
+        self.filters[column][text].toggle()
 
     def filter_logs(self):
         '''
