@@ -5,11 +5,11 @@ It also allows the user to filter the logs by column and value.
 '''
 import sys
 import argparse
-from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidget, QTableWidgetItem, QCompleter
-from PyQt5.QtWidgets import QHeaderView, QCheckBox, QVBoxLayout, QHBoxLayout, QWidget, QLabel
+from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidget, QTableWidgetItem, QCompleter, QMessageBox
+from PyQt5.QtWidgets import QHeaderView, QCheckBox, QVBoxLayout, QHBoxLayout, QWidget, QLabel, QDialog
 from PyQt5.QtWidgets import QLineEdit, QScrollArea, QPushButton, QColorDialog, QSplitter, QComboBox
 from PyQt5.QtGui import QColor
-from PyQt5.QtCore import QTimer, Qt
+from PyQt5.QtCore import QTimer, Qt, QEvent, pyqtSignal
 
 class LogConfig:
     '''
@@ -41,6 +41,69 @@ class LogConfig:
         for ind, column in enumerate(self.columns):
             return_str += f'\t{ind}) {column}\n'
         return return_str
+
+class SearchBox(QDialog):
+    '''
+    SearchBox is a class that creates a search box dialog.
+    '''
+    # Define the search_signal attribute as a pyqtSignal
+    search_signal = pyqtSignal(str, bool)
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.find_next = False
+
+        self.setWindowTitle("Search")
+        self.setModal(True)
+
+        # Create the search label and line edit
+        search_label = QLabel("Search:")
+        self.search_line_edit = QLineEdit()
+        self.search_line_edit.textChanged.connect(self.reset_search)
+        self.search_line_edit.returnPressed.connect(self.search)
+
+        # Create the search and cancel buttons
+        self.search_button = QPushButton("Find")
+        self.search_button.clicked.connect(self.search)
+        cancel_button = QPushButton("Cancel")
+        cancel_button.clicked.connect(self.reject)
+
+        # Add the widgets to the layout
+        layout = QHBoxLayout()
+        layout.addWidget(search_label)
+        layout.addWidget(self.search_line_edit)
+        layout.addWidget(self.search_button)
+        layout.addWidget(cancel_button)
+        self.setLayout(layout)
+
+    def reset_search(self):
+        '''
+        Reset search.
+        '''
+        self.find_next = False
+        self.search_button.setText("Find")
+
+    def search(self):
+        '''
+        Set the find_next attribute to True and change the button text
+        '''
+        self.find_next = True
+        self.search_button.setText("Find Next")
+        # Call the QDialog.accept method and return QDialog.Accepted
+        super().accept()
+        return QDialog.Accepted
+
+    def get_find_next(self):
+        '''
+        Get find next.
+        '''
+        return self.find_next
+
+    def get_search_text(self):
+        '''
+        Get search text.
+        '''
+        return self.search_line_edit.text()
 
 class Highlighter:
     '''
@@ -127,6 +190,16 @@ class Logger(QMainWindow):
     Logger is a class that displays logs in a table format.
     '''
 
+    def eventFilter(self, obj, event):
+        '''
+        Override event filter to create a search shortcut.
+        '''
+        if event.type() == QEvent.ShortcutOverride:
+            if event.key() == Qt.Key_F and event.modifiers() == Qt.ControlModifier:
+                self.show_search_box()
+                return True
+        return super().eventFilter(obj, event)
+
     def __init__(self, log_file, log_config_path):
         super().__init__()
         self.resize(1000, 600)
@@ -138,7 +211,14 @@ class Logger(QMainWindow):
         self.sidebar = QWidget()
         self.scroll_area = QScrollArea()
 
+        # Create the search box dialog
+        self.search_box = SearchBox(self)
+
+        # Install the shortcut event filter
+        self.installEventFilter(self)
+
         # Initialize Variables
+        self.last_found_item_index = None
         self.log_config = LogConfig(log_config_path)
         print(self.log_config)
         self.filters = {}
@@ -339,7 +419,6 @@ class Logger(QMainWindow):
         '''
         Toggle filter checkbox.
         '''
-        print (text, column)
         self.filters[column][text].toggle()
 
     def filter_logs(self):
@@ -418,6 +497,45 @@ class Logger(QMainWindow):
         self.num_of_logs = 0
         self.setWindowTitle(f'Logger ({self.num_of_logs} logs)')
         self.table.setRowCount(0)
+
+    def show_search_box(self):
+        '''
+        Show search box dialog.
+        '''
+        # Show the search box and get the search text
+        if self.search_box.exec_() == QDialog.Accepted:
+            search_text = self.search_box.get_search_text()
+            find_next = self.search_box.get_find_next()
+            if self.search_in_message(search_text, find_next) is not None:
+                self.show_search_box()
+            else:
+                QMessageBox.information(self, "Search", f"'{search_text}' was not found.")
+                self.search_box.reset_search()
+
+    def search_in_message(self, text, find_next=False):
+        '''
+        Search in message column in the table and put the focus on it.
+        '''
+        start_row = 0
+        if find_next and (self.last_found_item_index is not None):
+            start_row = self.last_found_item_index + 1
+
+        for i in range(start_row, self.table.rowCount()):
+            item = self.table.item(i, self.log_config.columns.index('Message'))
+            if item is None:
+                continue
+            if text.lower() in item.text().lower():
+                self.table.scrollToItem(item)
+                self.table.setCurrentItem(item)
+                self.last_found_item_index = i
+                break
+        else:
+            # If we didn't find any more items, start from the beginning
+            self.last_found_item_index = None
+            if start_row != 0:
+                self.search_in_message(text)
+        return self.last_found_item_index
+
 
 if __name__ == '__main__':
     # Use argparser to get log file path
