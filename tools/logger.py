@@ -4,9 +4,10 @@ It reads logs from a file and displays them in a table.
 It also allows the user to filter the logs by column and value.
 '''
 import sys
+import argparse
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidget, QTableWidgetItem
 from PyQt5.QtWidgets import QHeaderView, QCheckBox, QVBoxLayout, QHBoxLayout, QWidget, QLabel
-from PyQt5.QtWidgets import QLineEdit, QScrollArea, QPushButton, QColorDialog, QSplitter
+from PyQt5.QtWidgets import QLineEdit, QScrollArea, QPushButton, QColorDialog, QSplitter, QComboBox
 from PyQt5.QtGui import QColor
 from PyQt5.QtCore import QTimer, Qt
 
@@ -217,31 +218,35 @@ class Logger(QMainWindow):
                 continue
             checkbox = QCheckBox(column)
             checkbox.setChecked(True)
+            checkbox.stateChanged.connect(lambda state, text=column : self.select_all_checkboxes(state, text))
+            checkbox.setStyleSheet('font-weight: bold;')
+
             if column in self.log_config.ignored_columns_filters:
                 checkbox.setChecked(False)
             checkbox.stateChanged.connect(self.filter_logs)
             self.columns_filters[column] = checkbox
-            self.sidebar.layout().addWidget(checkbox)
 
         # Add filter checkboxes
         for j, column in enumerate(self.log_config.columns):
             if column in self.log_config.ignored_columns_filters:
                 continue
-            if self.columns_filters[column].isChecked():
-                values = {log[j] for log in self.logs}
-                self.filters[column] = {}
-                for value in values:
-                    checkbox = QCheckBox(value)
-                    checkbox.setChecked(True)
-                    checkbox.stateChanged.connect(self.filter_logs)
-                    self.filters[column][value] = checkbox
+            values = {log[j] for log in self.logs}
+            self.filters[column] = {}
+            for value in values:
+                checkbox = QCheckBox(value)
+                checkbox.setChecked(True)
+                checkbox.stateChanged.connect(self.filter_logs)
+                self.filters[column][value] = checkbox
 
         for column, filter_dict in self.filters.items():
-            if not self.columns_filters[column].isChecked():
-                continue
-            column_label = QLabel(column)
-            column_label.setStyleSheet('font-weight: bold;')
-            self.sidebar.layout().addWidget(column_label)
+
+            filter_header_layout = QHBoxLayout()
+            filter_header_layout.addWidget(self.columns_filters[column])
+            choose_function_dropdown = QComboBox()
+            choose_function_dropdown.addItems(filter_dict.keys())
+            filter_header_layout.addWidget(choose_function_dropdown)
+            self.sidebar.layout().addLayout(filter_header_layout)
+
             for value, checkbox in filter_dict.items():
                 self.sidebar.layout().addWidget(checkbox)
 
@@ -320,8 +325,6 @@ class Logger(QMainWindow):
         for j, column in enumerate(self.log_config):
             if column in self.log_config.ignored_columns_filters:
                 continue
-            if not self.columns_filters[column].isChecked():
-                continue
             checkbox = self.filters[column][log[j]]
             if not checkbox.isChecked():
                 visible = False
@@ -385,6 +388,16 @@ class Logger(QMainWindow):
             self.double_click_text = item.text()
             self.highlight_logs(self.double_click_text, self.double_click_color)
 
+    def select_all_checkboxes(self, state, text):
+        '''
+        select all checkboxes in a column.
+        '''
+        set_checked = False
+        if state == Qt.Checked:
+            set_checked = True
+        for checkbox in self.filters[text].values():
+            checkbox.setChecked(set_checked)
+
     def clear_logs(self):
         '''
         Clear logs from table.
@@ -395,7 +408,17 @@ class Logger(QMainWindow):
         self.table.setRowCount(0)
 
 if __name__ == '__main__':
+    # Use argparser to get log file path
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--log_file', type=str, default='/swgwork/matanl/git/bash_scripts/fw_x86_64.log',
+                        help='Path to log file')
+    parser.add_argument('--config_file', type=str, default='/swgwork/matanl/git/bash_scripts/config_file.txt',
+                        help='Path to log config file')
+    args = parser.parse_args()
+    log_file_path = args.log_file
+    config_file_path = args.config_file
+
     app = QApplication([])
-    logger = Logger('/swgwork/matanl/git/bash_scripts/fw_x86_p2212.log', '/swgwork/matanl/git/bash_scripts/config_file.txt')
+    logger = Logger(log_file_path, config_file_path)
     logger.show()
     sys.exit(app.exec_())
