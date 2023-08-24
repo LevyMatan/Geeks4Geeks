@@ -35,8 +35,13 @@ TEST_CASE("shortest_path_by_removing_k")
         int num_lines, num_numbers, k_new;
         std::string test_case_filename = "shortest_path_by_removing_k_tc.txt";
         std::string file_path = __FILE__;
-        std::string dir_path = file_path.substr(0, file_path.rfind("/"));
-        std::string test_case_file_full_path = (dir_path + "/" + test_case_filename);
+        #ifdef _WIN32
+        const char dir_sep = '\\';
+        #else
+        const char dir_sep = '/';
+        #endif
+        std::string dir_path = file_path.substr(0, file_path.rfind(dir_sep));
+        std::string test_case_file_full_path = (dir_path + dir_sep + test_case_filename);
         std::ifstream big_testcase(test_case_file_full_path, std::ifstream::in);
         if (!big_testcase.is_open())
         {
