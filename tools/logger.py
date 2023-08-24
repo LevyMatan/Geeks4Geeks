@@ -327,6 +327,8 @@ class Logger(QMainWindow):
             choose_function_dropdown.addItems(filter_dict.keys())
             choose_function_dropdown.setEditable(True)
             completer = QCompleter(filter_dict.keys())
+            completer.setCaseSensitivity(False)
+            completer.setFilterMode(Qt.MatchContains)
             choose_function_dropdown.setCompleter(completer)
             choose_function_dropdown.activated[str].connect(lambda text, column=column : self.toggle_filter(text, column))
             filter_header_layout.addWidget(choose_function_dropdown)
@@ -540,7 +542,7 @@ class Logger(QMainWindow):
 if __name__ == '__main__':
     # Use argparser to get log file path
     parser = argparse.ArgumentParser()
-    parser.add_argument('--log_file', type=str, default='/swgwork/matanl/git/bash_scripts/fw_x86_64.log',
+    parser.add_argument('--log_file', type=str, default='/swgwork/matanl/git/bash_scripts/fw_x86_p2212.log',
                         help='Path to log file')
     parser.add_argument('--config_file', type=str, default='/swgwork/matanl/git/bash_scripts/config_file.txt',
                         help='Path to log config file')
