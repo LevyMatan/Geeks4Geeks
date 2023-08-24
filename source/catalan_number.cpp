@@ -45,7 +45,8 @@ int find_catalan(int n)
                 = (a_catalan[i] + (a_catalan[j] * a_catalan[i - j - 1]) % 1000000007) % 1000000007;
     }
 
-    int res = a_catalan[n];
+    int res = (int)a_catalan[n];  // It is allowed to explicitly cast to int because the result is
+                                  // guaranteed to fit in 32 bit integer after the modulo operation
     delete[] a_catalan;
     return res;
 }
