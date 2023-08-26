@@ -41,8 +41,6 @@ I wanted to run the check-format tool before commiting to avoid many useles comm
     fi
     ```
 
-
     This code will run the first check the format, if the check fails it will run the fix-format will abort the commit.
 
 7. Save and close the pre-commit file.
-

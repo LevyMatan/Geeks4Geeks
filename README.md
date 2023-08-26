@@ -45,9 +45,9 @@ Constraints:
 1 ≤ N ≤ 106
 0 ≤ A[i] ≤ 1
 
-### Example 1
+### Examples
 
-```
+```txt
 Input:
 N = 5
 A[] = {1, 0, 0, 1, 0} 
@@ -60,9 +60,7 @@ Count of one after fliping is : 4
 [Note: the subarray marked in bold is the flipped subarray]
 ```
 
-### Example 2
-
-```
+```txt
 Input:
 N = 7
 A[] = {1, 0, 0, 1, 0, 0, 1}
@@ -74,6 +72,7 @@ After flip operation array is : [ 1 1 1 0 1 1 1]
 Count of one after fliping is : 6
 [Note: the subarray marked in bold is the flipped subarray]
 ```
+
 ## Add Binary Strings
 
 Given two binary strings A and B consisting of only 0s and 1s.
@@ -81,7 +80,7 @@ Find the resultant string after adding the two Binary Strings.
 Note: The input strings may contain leading zeros but the output
 string should not have any leading zeros.
 
-### Example 1
+### Examples
 
 ```txt
 Input:
@@ -92,8 +91,6 @@ Explanation:
 + 111
 10100
 ```
-
-### Example 2
 
 ```txt
 Input:
@@ -118,7 +115,7 @@ strictly less than N, have the same number of set bits as N.
 He is a little weak in maths. Help him find the number of integers.
 Note : Since N takes large values, brute force won't work.  
 
-### Example 1
+### Examples
 
 ```txt
         Input:
@@ -130,8 +127,6 @@ Note : Since N takes large values, brute force won't work.
         same number of set bits are : 4, 2, 1
         Hence, the result is 3.
 ```
-
-### Example 2
 
 ```txt
         Input:
@@ -173,7 +168,7 @@ NOTE: If there is a tie, then compare with segment's length and return segment w
 maximum length. If there is still a tie, then return the segment with minimum starting index. If
 no such subarray is present return "-1"
 
-### Example 1
+### Examples
 
 ```txt
 Input:
@@ -183,8 +178,6 @@ Output: 1 2 3
 Explanation: In the given array every
 element is non-negative.
 ```
-
-### Example 2
 
 ```txt
 Input:
