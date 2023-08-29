@@ -10,7 +10,7 @@
 #include <longest_k_unique_characters_substring/longest_k_unique_characters_substring.h>
 
 #include <algorithm>
-
+#include <climits>
 /**
  * @brief find the length of the longest substring with k unique characters in a given string
  *        Algorithm:
