@@ -209,6 +209,9 @@ if __name__ == '__main__':
         sys.exit(1)
 
     module_name = input('Enter module name: ')
+    # convert module name to lower case and seperate words by '_' instead of ' '
+    module_name = module_name.lower().replace(' ', '_')
+
     make_directories(module_name)
     create_header_file(module_name)
     create_source_file(module_name)
