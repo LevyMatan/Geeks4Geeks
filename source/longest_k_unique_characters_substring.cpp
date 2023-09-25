@@ -92,7 +92,7 @@ int longest_k_substr(std::string s, int k)
         }
 
         // Update the last index of c.
-        char_index[c_idx] = i;
+        char_index[c_idx] = (int)i;
     }
 
     return max_length;
