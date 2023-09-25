@@ -14,6 +14,8 @@ Note : Output array must be sorted in non-increasing order.
 #include <maximum_sum_combination/maximum_sum_combination.h>
 
 #include <algorithm>
+#include <queue>
+#include <utility>
 
 /**
  *
@@ -33,72 +35,34 @@ std::vector<int> max_sum_combination(int N, int K, std::vector<int> &A, std::vec
 {
     std::sort(A.begin(), A.end(), compare);
     std::sort(B.begin(), B.end(), compare);
-    int ind_a = 0;
-    int ind_b = 0;
     std::vector<int> res(K, 0);
-    std::vector<int> ind_a_max(N, 0);
-    std::vector<int> ind_b_max(N, 0);
+    std::priority_queue<std::pair<int, int>, std::vector<std::pair<int, int>>,
+                        std::less<std::pair<int, int>>>
+        pq;
 
-    for (int ind_k = 0; ind_k < K; ind_k++)
+    for (int i = 0; i < N; i++)
     {
-        int sum = A[ind_a] + B[ind_b];
-        res[ind_k] = sum;
+        pq.push(std::pair<int, int>(A[i] + B[0], 0));
+    }
 
-        // What will be the next element?
-        int element_a;
-        int element_b;
-        if (ind_a + 1 < N)
-        {
-            element_a = A[ind_a + 1];
-            element_b = B[ind_b_max[ind_a + 1]];
-        }
-        else
-        {
-            element_a = A[ind_a];
-            element_b = B[ind_b_max[ind_a] + 1];
-        }
-        int option_1 = element_a + element_b;
+    int k = 0;
 
-        if (ind_b + 1 < N)
-        {
-            element_b = B[ind_b + 1];
-            element_a = A[ind_a_max[ind_b + 1]];
-        }
-        else
-        {
-            element_b = B[ind_b];
-            element_a = A[ind_a_max[ind_b] + 1];
-        }
-        int option_2 = element_a + element_b;
+    while (k < K)
+    {
+        std::pair<int, int> p = pq.top();
+        pq.pop();
 
-        if (option_1 < option_2)
+        int sum = p.first;
+        int j = p.second;
+
+        res[k] = sum;
+
+        if (j < N - 1)
         {
-            if (ind_b + 1 < N)
-            {
-                ind_b++;
-                ind_a = ind_a_max[ind_b];
-                ind_a_max[ind_b]++;
-            }
-            else
-            {
-                ind_a_max[ind_b]++;
-                ind_a = ind_a_max[ind_b];
-            }
+            pq.push(std::pair<int, int>(sum - B[j] + B[j + 1], j + 1));
         }
-        else
-        {
-            if (ind_a + 1 < N)
-            {
-                ind_a++;
-                ind_b = ind_b_max[ind_a];
-                ind_b_max[ind_a]++;
-            }
-            else
-            {
-                ind_b_max[ind_a]++;
-                ind_b = ind_b_max[ind_a];
-            }
-        }
+
+        k++;
     }
 
     return res;
