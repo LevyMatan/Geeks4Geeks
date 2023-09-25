@@ -26,7 +26,7 @@ std::vector<std::vector<int> > find_four_sum(std::vector<int> &arr, int k)
 {
     std::vector<std::vector<int> > result;
 
-    int n = arr.size();
+    int n = (int)arr.size();
     if (n < 4)
     {
         return result;
