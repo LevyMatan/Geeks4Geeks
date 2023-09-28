@@ -1,9 +1,9 @@
 # Geeks For Geeks - Problem of the Day
 
-[![Actions Status](https://github.com/LevyMatan/Geeks4Geeks/workflows/MacOS/badge.svg)](https://github.com/LevyMatan/Geeks4Geeks/actions)
-[![Actions Status](https://github.com/LevyMatan/Geeks4Geeks/workflows/Windows/badge.svg)](https://github.com/LevyMatan/Geeks4Geeks/actions)
-[![Actions Status](https://github.com/LevyMatan/Geeks4Geeks/workflows/Ubuntu/badge.svg)](https://github.com/LevyMatan/Geeks4Geeks/actions)
-[![Actions Status](https://github.com/LevyMatan/Geeks4Geeks/workflows/Style/badge.svg)](https://github.com/LevyMatan/Geeks4Geeks/actions)
+[![MacOS](https://github.com/LevyMatan/Geeks4Geeks/actions/workflows/macos.yml/badge.svg)](https://github.com/LevyMatan/Geeks4Geeks/actions/workflows/macos.yml)
+[![Windows](https://github.com/LevyMatan/Geeks4Geeks/actions/workflows/windows.yml/badge.svg)](https://github.com/LevyMatan/Geeks4Geeks/actions/workflows/windows.yml)
+[![Ubuntu](https://github.com/LevyMatan/Geeks4Geeks/actions/workflows/ubuntu.yml/badge.svg)](https://github.com/LevyMatan/Geeks4Geeks/actions/workflows/ubuntu.yml)
+[![Style](https://github.com/LevyMatan/Geeks4Geeks/actions/workflows/style.yml/badge.svg)](https://github.com/LevyMatan/Geeks4Geeks/actions/workflows/style.yml)
 [![Install](https://github.com/LevyMatan/Geeks4Geeks/actions/workflows/install.yml/badge.svg)](https://github.com/LevyMatan/Geeks4Geeks/actions/workflows/install.yml)
 [![codecov](https://codecov.io/gh/LevyMatan/Geeks4Geeks/branch/master/graph/badge.svg)](https://codecov.io/gh/LevyMatan/Geeks4Geeks)
 
