@@ -26,8 +26,8 @@ typedef enum cell_type_e
  */
 static void mark_land_as_sea(vector<vector<int>> &grid, int i, int j)
 {
-    int rows = grid.size();
-    int cols = grid[0].size();
+    int rows = (int)grid.size();
+    int cols = (int)grid[0].size();
 
     if (i < 0 || i >= rows || j < 0 || j >= cols || grid[i][j] == SEA)
     {
@@ -56,8 +56,8 @@ static void mark_land_as_sea(vector<vector<int>> &grid, int i, int j)
  */
 int number_of_enclaves(vector<vector<int>> &grid)
 {
-    int rows = grid.size();
-    int cols = grid[0].size();
+    int rows = (int)grid.size();
+    int cols = (int)grid[0].size();
 
     for (int i = 0; i < rows; i++)
     {
