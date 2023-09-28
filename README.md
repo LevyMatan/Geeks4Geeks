@@ -4,7 +4,7 @@
 [![Actions Status](https://github.com/LevyMatan/Geeks4Geeks/workflows/Windows/badge.svg)](https://github.com/LevyMatan/Geeks4Geeks/actions)
 [![Actions Status](https://github.com/LevyMatan/Geeks4Geeks/workflows/Ubuntu/badge.svg)](https://github.com/LevyMatan/Geeks4Geeks/actions)
 [![Actions Status](https://github.com/LevyMatan/Geeks4Geeks/workflows/Style/badge.svg)](https://github.com/LevyMatan/Geeks4Geeks/actions)
-[![Actions Status](https://github.com/LevyMatan/Geeks4Geeks/workflows/Install/badge.svg)](https://github.com/LevyMatan/Geeks4Geeks/actions)
+[![Install](https://github.com/LevyMatan/Geeks4Geeks/actions/workflows/install.yml/badge.svg)](https://github.com/LevyMatan/Geeks4Geeks/actions/workflows/install.yml)
 [![codecov](https://codecov.io/gh/LevyMatan/Geeks4Geeks/branch/master/graph/badge.svg)](https://codecov.io/gh/LevyMatan/Geeks4Geeks)
 
 Here are a bunch of coding question solutions.
