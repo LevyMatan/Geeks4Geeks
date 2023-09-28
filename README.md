@@ -9,7 +9,17 @@
 
 Here are a bunch of coding question solutions.
 
-## Catalan Number
+<details>
+<summary><h2>Number of Enclaves</h2></summary>
+
+- [Problem Statement](/include/number_of_enclaves/number_of_enclaves.md)
+- [Solution](/source/number_of_enclaves.cpp)
+- [Test](/test/number_of_enclaves_test.cpp)
+
+</details>
+
+<details>
+<summary><h2>Catalan Number</h2></summary>
 
 Given a number N. The task is to find the Nth catalan number.
 The first few Catalan numbers for N = 0, 1, 2, 3, … are 1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862, …
@@ -33,6 +43,8 @@ Input:
 N = 4
 Output: 14
 ```
+
+</details>
 
 ## Flip Bits
 
