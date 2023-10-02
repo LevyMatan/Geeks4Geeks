@@ -49,6 +49,12 @@ add_executable(${PROJECT_NAME} ${sources})
 target_link_libraries(${PROJECT_NAME} PRIVATE doctest::doctest Geeks4Geeks::Geeks4Geeks fmt::fmt)
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17)
 
+# ---- Add preprocessor definitions ----
+# Add a preprocessor definition for DEBUG_PRINTS_ON when the build configuration is Debug
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+  add_definitions(-DDEBUG_PRINTS_ON)
+endif()
+
 # enable compiler warnings
 if(NOT TEST_INSTALLED_VERSION)
   if(CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMPILER_ID MATCHES "GNU")
