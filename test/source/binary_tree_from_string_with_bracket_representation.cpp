@@ -1,6 +1,5 @@
 #include <binary_tree_from_string_with_bracket_representation/binary_tree_from_string_with_bracket_representation.h>
 #include <doctest/doctest.h>
-#include <geeks4geeks/version.h>
 
 #include <string>
 
