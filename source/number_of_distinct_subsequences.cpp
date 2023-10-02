@@ -13,7 +13,8 @@
 
 int distinct_subsequences(std::string s)
 {
-    int n = s.length();
+    const int LIMITER = 1000000007;
+    int n = (int)s.length();
     std::vector<int> dp(n + 1);
     dp[0] = 1;
     int last[26];
@@ -23,10 +24,10 @@ int distinct_subsequences(std::string s)
     }
     for (int i = 1; i <= n; i++)
     {
-        dp[i] = (2 * dp[i - 1]) % 1000000007;
+        dp[i] = (2 * dp[i - 1]) % LIMITER;
         if (last[s[i - 1] - 'a'] != -1)
         {
-            dp[i] = (dp[i] - dp[last[s[i - 1] - 'a']] + 1000000007) % 1000000007;
+            dp[i] = (dp[i] - dp[last[s[i - 1] - 'a']] + LIMITER) % LIMITER;
         }
         last[s[i - 1] - 'a'] = i - 1;
     }
