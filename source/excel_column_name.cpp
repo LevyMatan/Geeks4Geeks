@@ -9,6 +9,8 @@
  */
 #include <excel_column_name/excel_column_name.h>
 
+#include <algorithm>
+
 /**
  * @brief Get the excel column name from column number
  *
