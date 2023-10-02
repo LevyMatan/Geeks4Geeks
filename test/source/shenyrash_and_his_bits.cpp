@@ -1,5 +1,4 @@
 #include <doctest/doctest.h>
-#include <geeks4geeks/version.h>
 #include <shenyrash_and_his_bits/shenyrash_and_his_bits.h>
 #include <stdlib.h>
 
