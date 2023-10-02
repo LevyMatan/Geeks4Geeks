@@ -1,6 +1,5 @@
 #include <add_binary_strings/add_binary_strings.h>
 #include <doctest/doctest.h>
-#include <geeks4geeks/version.h>
 #include <stdlib.h>
 
 #include <bitset>
