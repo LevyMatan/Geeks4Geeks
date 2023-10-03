@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14...3.22)
+cmake_minimum_required(VERSION 3.19...3.22)
 
 # ---- Project ----
 
@@ -43,6 +43,26 @@ CPMAddPackage(
 file(GLOB_RECURSE headers CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
 file(GLOB_RECURSE sources CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/source/*.cpp")
 
+# ---- General Setting ----
+
+# Be nice to visual studio
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
+# Be nice and export compile commands by default, this is handy for clang-tidy and for other tools.
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+# Check if the time command is installed
+find_program(TIME_COMMAND time)
+if(TIME_COMMAND)
+  # Enable build profiling using the time command
+  option(MEASURE_ALL "When enabled all commands will be passed through time command" OFF)
+  if(MEASURE_ALL)
+    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${TIME_COMMAND}")
+    message("Enable time measurement for compilation.")
+  endif()
+else()
+  message(WARNING "The time command is not installed. Build profiling will be disabled.")
+endif()
 # ---- Create library ----
 
 # Note: for header-only libraries change all PUBLIC flags to INTERFACE and create an interface
