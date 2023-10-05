@@ -12,6 +12,10 @@ There are a few global variables that can be changed:
     - MODULE_WIDTH: number of lanes per module
     - ENABLE_DEBUG_PRINTS: enable/disable debug prints
 
+Important: Use a full PRS file, there is an assumptions the relevant module database section 
+comes after the line '[non_isfu_config]'.
+If there is a change in the PRS structure this script need to be updated.
+
 module_db.csv columns:
     - module_idx
     - module_lane
@@ -48,16 +52,27 @@ import argparse
 import re
 
 # Adjust these values based on the device
-PORT_WIDTH = 1
+PORT_WIDTH = 2
 MODULE_WIDTH = 8
 
-# Do not change these values (Atleast not for Sunbird)
-CPORT_WIDTH = 4
-UGL_WIDTH = 12
-NUM_OF_UGLS = 12
-NUM_OF_LANES_IN_CHIP = 148
-NUM_OF_LANES_IN_8X = 8
+class DeviceParams:
+    def __init__(self, device_name="Sunbird"):
+        if device_name.lower() == "sunbird":
+            self.CPORT_WIDTH = 4
+            self.UGL_WIDTH = 12
+            self.NUM_OF_UGLS = 13
+            self.NUM_OF_LANES_IN_CHIP = 144 
+            self.NUM_OF_LANES_IN_8X = 8
+            self.NUM_OF_LOCAL_PORTS_IN_8X = 8
+        if device_name.lower() == "blackbird":
+            self.CPORT_WIDTH = 8
+            self.UGL_WIDTH = 12
+            self.NUM_OF_UGLS = 12
+            self.NUM_OF_LANES_IN_CHIP = 576 #
+            self.NUM_OF_LANES_IN_8X = 8
+            self.NUM_OF_LOCAL_PORTS_IN_8X = 4
 
+DEVICE = DeviceParams("sunbird")
 # Debug prints
 ENABLE_DEBUG_PRINTS = True
 
@@ -83,6 +98,7 @@ class Module:
 
     def __init__(self):
         self.num_of_lanes = MODULE_WIDTH
+        self.module_idx = 0
         self.tx_serdes_lanes = [0] * self.num_of_lanes
         self.rx_serdes_lanes = [0] * self.num_of_lanes
         self.local_port = [0] * self.num_of_lanes
@@ -132,7 +148,6 @@ def parse_module_database(filename):
                         modules[module_num].resize_module(last_lane)
                     # New module
                     module_num += 1
-                    debug_print(f"module_num: {module_num}, line: {line}")
                     modules.append(Module())
                 else:
                     
@@ -155,6 +170,8 @@ def parse_module_database(filename):
                         if 'serdes' == lane_attribute:
                             if lane_type == 'tx':
                                 modules[module_num].tx_serdes_lanes[lane_num] = value
+                                if 0 == lane_num:
+                                    modules[module_num].module_idx = module_idx;
                             elif lane_type == 'rx':
                                 modules[module_num].rx_serdes_lanes[lane_num] = value
                         elif 'polarity' == lane_attribute:
@@ -173,8 +190,8 @@ def parse_module_database(filename):
         modules[module_num].resize_module(last_lane)
 
     # Debug: print all modules
-    for module_idx, module in enumerate(modules):
-        debug_print(f'module_idx: {module_idx}')
+    for module in modules:
+        debug_print(f'module_idx: {module.module_idx}')
         debug_print(f'    tx_serdes_lanes: {module.tx_serdes_lanes}')
         debug_print(f'    rx_serdes_lanes: {module.rx_serdes_lanes}')
         debug_print(f'    tx_polarity: {module.tx_polarity}')
@@ -184,7 +201,7 @@ def parse_module_database(filename):
 
     # Remove duplicates from ga lane owners
     ga_lane_owners = list(set(ga_lane_owners))
-    if [] == ga_lane_owners:
+    if not ga_lane_owners:
         ga_lane_owners.append(0)
 
     # Debug: print all ga lane owners
@@ -197,25 +214,25 @@ def get_port_mapping(modules_list, ga_owner):
     '''
     Get port mapping
     '''
-    group_8x_counter = [0] * ((NUM_OF_LANES_IN_CHIP // NUM_OF_LANES_IN_8X) + 1)
-    cport_lane_counter = [-1] * (NUM_OF_LANES_IN_CHIP // CPORT_WIDTH)
-    for module_idx, module in enumerate(modules_list):
+    group_8x_counter = [0] * ((DEVICE.NUM_OF_LANES_IN_CHIP // DEVICE.NUM_OF_LANES_IN_8X) + 1)
+    cport_lane_counter = [-1] * (DEVICE.NUM_OF_LANES_IN_CHIP // DEVICE.CPORT_WIDTH + 1)
+    for module in modules_list:
         for lane in range(module.num_of_lanes):
             if ga_owner == module.ga_lane_owner[lane]:
-                group_8x_id = module.tx_serdes_lanes[lane] // NUM_OF_LANES_IN_8X
-                local_port_base = group_8x_id * NUM_OF_LANES_IN_8X
+                group_8x_id = module.tx_serdes_lanes[lane] // DEVICE.NUM_OF_LANES_IN_8X
+                local_port_base = group_8x_id * DEVICE.NUM_OF_LOCAL_PORTS_IN_8X
                 local_port_offset = group_8x_counter[group_8x_id]
                 local_port = 1 + local_port_base + local_port_offset
                 local_lane = lane % PORT_WIDTH
                 group_8x_counter[group_8x_id] = group_8x_counter[group_8x_id] + \
                     ((1 + local_lane) // PORT_WIDTH) * PORT_WIDTH
-                cport = (local_port - 1) // CPORT_WIDTH
+                cport = (local_port - 1) // DEVICE.CPORT_WIDTH
                 cport_lane_counter[cport] = cport_lane_counter[cport] + 1
                 module.local_port[lane] = local_port
                 module.local_lane[lane] = local_lane
                 module.cport[lane] = cport
                 module.cport_lane[lane] = cport_lane_counter[cport]
-                debug_print(f'module: {module_idx}, module_lane: {lane}, group_8x_id: {group_8x_id}, local_port_base: {local_port_base}, local_port_offset: {local_port_offset}, local_port: {local_port}, local_lane: {local_lane}, cport: {cport}')
+                debug_print(f'module: {module.module_idx}, module_lane: {lane}, group_8x_id: {group_8x_id}, local_port_base: {local_port_base}, local_port_offset: {local_port_offset}, local_port: {local_port}, local_lane: {local_lane}, cport: {cport}')
 
 
 def export_module_db_to_csv(module_list):
@@ -249,7 +266,7 @@ def export_module_db_to_csv(module_list):
         csv_file.write('Index,,Input,,,,,,Local Port Mapping,,Cport Mapping,,UGL Mapping\n')
         csv_file.write(
             'module_idx,module_lane,tx_serdes,tx_polarity,rx_serdes,rx_polarity,ib_port,ga_lane_owner,local_port,local_lane,cport,cport_lane,tx_ugl_idx,tx_ugl_lane,rx_ugl_idx,rx_ugl_lane\n')
-        for module_idx, module in enumerate(module_list):
+        for module in module_list:
             for lane in range(module.num_of_lanes):
                 tx_serdes_lane = module.tx_serdes_lanes[lane]
                 tx_polarity = module.tx_polarity[lane]
@@ -261,12 +278,12 @@ def export_module_db_to_csv(module_list):
                 local_lane = module.local_lane[lane]
                 cport = module.cport[lane]
                 cport_lane = module.cport_lane[lane]
-                tx_ugl_idx = tx_serdes_lane // UGL_WIDTH
-                tx_ugl_lane = tx_serdes_lane % UGL_WIDTH
-                rx_ugl_idx = rx_serdes_lane // UGL_WIDTH
-                rx_ugl_lane = rx_serdes_lane % UGL_WIDTH
+                tx_ugl_idx = tx_serdes_lane // DEVICE.UGL_WIDTH
+                tx_ugl_lane = tx_serdes_lane % DEVICE.UGL_WIDTH
+                rx_ugl_idx = rx_serdes_lane // DEVICE.UGL_WIDTH
+                rx_ugl_lane = rx_serdes_lane % DEVICE.UGL_WIDTH
                 csv_file.write(
-                    f'{module_idx},{lane},{tx_serdes_lane},{tx_polarity},{rx_serdes_lane},{rx_polarity},{ib_port},{ga_lane_owner},{local_port},{local_lane},{cport},{cport_lane},{tx_ugl_idx},{tx_ugl_lane},{rx_ugl_idx},{rx_ugl_lane}\n')
+                    f'{module.module_idx},{lane},{tx_serdes_lane},{tx_polarity},{rx_serdes_lane},{rx_polarity},{ib_port},{ga_lane_owner},{local_port},{local_lane},{cport},{cport_lane},{tx_ugl_idx},{tx_ugl_lane},{rx_ugl_idx},{rx_ugl_lane}\n')
 
 
 class Ugl:
@@ -275,10 +292,10 @@ class Ugl:
     '''
 
     def __init__(self):
-        self.num_of_lanes = UGL_WIDTH
+        self.num_of_lanes = DEVICE.UGL_WIDTH
         self.tx_log2phy_sel = [0] * self.num_of_lanes
         self.rx_log2phy_sel = [0] * self.num_of_lanes
-        self.rx_logic_reversal_16to8 = [0] * (self.num_of_lanes // CPORT_WIDTH)
+        self.rx_logic_reversal_16to8 = [0] * (self.num_of_lanes // DEVICE.CPORT_WIDTH)
 
 
 def compute_ugl_reversals(module_list, ga_owner):
@@ -299,27 +316,27 @@ def compute_ugl_reversals(module_list, ga_owner):
         # Ugl16XReversal = (logical_lane/8 != physical_lane_rx/8) ^ (((physical_lane_rx/8)%9)%2)
         # top.iopl_ugl[$UglRx].uglpl.sunbird_iopl_reversals.rx_logic_reversal_16to8[($physical_lane_rx%12)/4] = $Ugl16XReversal
     '''
-    ugl_hw_configurations = [Ugl() for _ in range(NUM_OF_UGLS + 1)]
+    ugl_hw_configurations = [Ugl() for _ in range(DEVICE.NUM_OF_UGLS + 1)]
 
     for module_idx, module in enumerate(module_list):
         for lane in range(module.num_of_lanes):
             if ga_owner == module.ga_lane_owner[lane]:
                 cport = module.cport[lane]
                 cport_lane = module.cport_lane[lane]
-                logical_lane = cport * CPORT_WIDTH + cport_lane
+                logical_lane = cport * DEVICE.CPORT_WIDTH + cport_lane
                 # 1) TX - 8X reversals
-                ugl_tx = module.tx_serdes_lanes[lane] // UGL_WIDTH
-                ugl_tx_lane = module.tx_serdes_lanes[lane] % UGL_WIDTH
-                ugl_hw_configurations[ugl_tx].tx_log2phy_sel[ugl_tx_lane] = logical_lane % NUM_OF_LANES_IN_8X
+                ugl_tx = module.tx_serdes_lanes[lane] // DEVICE.UGL_WIDTH
+                ugl_tx_lane = module.tx_serdes_lanes[lane] % DEVICE.UGL_WIDTH
+                ugl_hw_configurations[ugl_tx].tx_log2phy_sel[ugl_tx_lane] = logical_lane % DEVICE.NUM_OF_LANES_IN_8X
                 debug_print(
-                    f'module_idx: {module_idx}, lane: {lane}, ugl_tx: {ugl_tx}, ugl_tx_lane: {ugl_tx_lane}, tx_log2phy_sel: {logical_lane % NUM_OF_LANES_IN_8X}')
+                    f'module_idx: {module_idx}, lane: {lane}, ugl_tx: {ugl_tx}, ugl_tx_lane: {ugl_tx_lane}, tx_log2phy_sel: {logical_lane % DEVICE.NUM_OF_LANES_IN_8X}')
                 # 2) RX - 8X reversals
-                ugl_rx = module.rx_serdes_lanes[lane] // UGL_WIDTH
-                ugl_rx_lane = module.rx_serdes_lanes[lane] % UGL_WIDTH
-                ugl_hw_configurations[ugl_rx].rx_log2phy_sel[ugl_rx_lane] = logical_lane % NUM_OF_LANES_IN_8X
+                ugl_rx = module.rx_serdes_lanes[lane] // DEVICE.UGL_WIDTH
+                ugl_rx_lane = module.rx_serdes_lanes[lane] % DEVICE.UGL_WIDTH
+                ugl_hw_configurations[ugl_rx].rx_log2phy_sel[ugl_rx_lane] = logical_lane % DEVICE.NUM_OF_LANES_IN_8X
                 # 3) RX - 16X reversals
-                ugl_16x_reversal = ((logical_lane // NUM_OF_LANES_IN_8X) != (module.rx_serdes_lanes[lane] // NUM_OF_LANES_IN_8X)) ^ (
-                    ((module.rx_serdes_lanes[lane] // NUM_OF_LANES_IN_8X) % 9) % 2)
+                ugl_16x_reversal = ((logical_lane // DEVICE.NUM_OF_LANES_IN_8X) != (module.rx_serdes_lanes[lane] // DEVICE.NUM_OF_LANES_IN_8X)) ^ (
+                    ((module.rx_serdes_lanes[lane] // DEVICE.NUM_OF_LANES_IN_8X) % 9) % 2)
                 ugl_hw_configurations[ugl_rx].rx_logic_reversal_16to8[ugl_rx_lane //
                                                                       4] = ugl_16x_reversal
 
@@ -353,7 +370,7 @@ class Cport:
     '''
 
     def __init__(self):
-        self.num_of_lanes = CPORT_WIDTH
+        self.num_of_lanes = DEVICE.CPORT_WIDTH
         self.ugl2plu_tx_sel_lane = [0] * self.num_of_lanes
         self.ugl2plu_rx_sel_lane = [0] * self.num_of_lanes
         self.ioplc_rx_16x_reversal_sel = [0] * self.num_of_lanes
@@ -371,22 +388,22 @@ def compute_cport_reversals(module_list, ga_owner):
         # Cport16XReversal = (logical_lane/8 != physical_lane_rx/8) ^ (((logical_lane/8)%9)%2)
         # top.ports.cluster[$Cport].pmux.pmux.ioplc_rx_16x_reversal_sel = $Cport16XReversal
     '''
-    cport_hw_configurations = [Cport() for _ in range(NUM_OF_LANES_IN_CHIP // CPORT_WIDTH)]
+    cport_hw_configurations = [Cport() for _ in range((DEVICE.NUM_OF_LANES_IN_CHIP // DEVICE.CPORT_WIDTH) + 1)]
     for module in module_list:
         for lane in range(module.num_of_lanes):
             if ga_owner == module.ga_lane_owner[lane]:
                 cport = module.cport[lane]
                 cport_lane = module.cport_lane[lane]
-                logical_lane = cport * CPORT_WIDTH + cport_lane
+                logical_lane = cport * DEVICE.CPORT_WIDTH + cport_lane
                 # 1) TX - 8X reversals
                 debug_print(
-                    f'lane: {lane}, cport: {cport}, cport_lane: {cport_lane}, ugl2plu_tx_sel_lane: {module.tx_serdes_lanes[lane] % NUM_OF_LANES_IN_8X}')
-                cport_hw_configurations[cport].ugl2plu_tx_sel_lane[cport_lane] = module.tx_serdes_lanes[lane] % NUM_OF_LANES_IN_8X
+                    f'lane: {lane}, cport: {cport}, cport_lane: {cport_lane}, ugl2plu_tx_sel_lane: {module.tx_serdes_lanes[lane] % DEVICE.NUM_OF_LANES_IN_8X}')
+                cport_hw_configurations[cport].ugl2plu_tx_sel_lane[cport_lane] = module.tx_serdes_lanes[lane] % DEVICE.NUM_OF_LANES_IN_8X
                 # 2) RX - 8X reversals
-                cport_hw_configurations[cport].ugl2plu_rx_sel_lane[cport_lane] = module.rx_serdes_lanes[lane] % NUM_OF_LANES_IN_8X
+                cport_hw_configurations[cport].ugl2plu_rx_sel_lane[cport_lane] = module.rx_serdes_lanes[lane] % DEVICE.NUM_OF_LANES_IN_8X
                 # 3) RX - 16X reversals
                 cport_hw_configurations[cport].ioplc_rx_16x_reversal_sel[cport_lane] = (
-                    (logical_lane // NUM_OF_LANES_IN_8X) != (module.rx_serdes_lanes[lane] // NUM_OF_LANES_IN_8X)) ^ (((logical_lane // NUM_OF_LANES_IN_8X) % 9) % 2)
+                    (logical_lane // DEVICE.NUM_OF_LANES_IN_8X) != (module.rx_serdes_lanes[lane] // DEVICE.NUM_OF_LANES_IN_8X)) ^ (((logical_lane // DEVICE.NUM_OF_LANES_IN_8X) % 9) % 2)
 
     # Debug: print all cport configurations
     for cport_idx, cport in enumerate(cport_hw_configurations):
@@ -414,7 +431,10 @@ def export_cport_configurations_to_csv(cport_hw_configurations, ga_owner):
 if '__main__' == __name__:
 
     parser = argparse.ArgumentParser(description='Port mapping')
-    parser.add_argument('prs_file', help='Path to prs file',
+    parser.add_argument('prs_file', help='Path to prs file\n\
+Important: Use a full PRS file, there is an assumptions the relevant module database section\n\
+comes after the line "[non_isfu_config]".\n\
+If there is a change in the PRS structure this script need to be updated.',
                         type=str, default='prs.prs')
     args = parser.parse_args()
     debug_print(f'prs_file: {args.prs_file}')
