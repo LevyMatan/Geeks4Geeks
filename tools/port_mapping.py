@@ -56,12 +56,15 @@ PORT_WIDTH = 2
 MODULE_WIDTH = 8
 
 class DeviceParams:
+    '''
+    Device parameters
+    '''
     def __init__(self, device_name="Sunbird"):
         if device_name.lower() == "sunbird":
             self.CPORT_WIDTH = 4
             self.UGL_WIDTH = 12
             self.NUM_OF_UGLS = 13
-            self.NUM_OF_LANES_IN_CHIP = 144 
+            self.NUM_OF_LANES_IN_CHIP = 144
             self.NUM_OF_LANES_IN_8X = 8
             self.NUM_OF_LOCAL_PORTS_IN_8X = 8
         if device_name.lower() == "blackbird":
@@ -138,10 +141,10 @@ def parse_module_database(filename):
         for line in file:
             if line.startswith('[non_isfu_config]'):
                 module_db_started = True
-                
+
             if module_db_started:
                 if line.startswith(';;;;; module'):
-                    
+
                     debug_print(f"module_num: {module_num}, line: {line}")
                     if (module_num >= 0 and last_lane < modules[module_num].num_of_lanes):
                         # Resize module
@@ -150,7 +153,7 @@ def parse_module_database(filename):
                     module_num += 1
                     modules.append(Module())
                 else:
-                    
+
                     # Parse lane data
                     match = re.match(
                         r'module\.num\[(\d+)\]\.m2l\.(\w+)\.lane\[(\d+)\]\.(\w+)\s*=\s*(\d+)', line)
@@ -171,7 +174,7 @@ def parse_module_database(filename):
                             if lane_type == 'tx':
                                 modules[module_num].tx_serdes_lanes[lane_num] = value
                                 if 0 == lane_num:
-                                    modules[module_num].module_idx = module_idx;
+                                    modules[module_num].module_idx = module_idx
                             elif lane_type == 'rx':
                                 modules[module_num].rx_serdes_lanes[lane_num] = value
                         elif 'polarity' == lane_attribute:
