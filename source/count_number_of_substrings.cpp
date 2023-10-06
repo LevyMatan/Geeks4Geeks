@@ -48,7 +48,7 @@ Constraints:
  */
 long long int count_substrings(std::string &str, int k)
 {
-    int n = str.length();
+    int n = (int)str.length();
     int res = 0;
     int cnt[26];
 
@@ -77,7 +77,7 @@ long long int count_substrings(std::string &str, int k)
 // Using sliding window
 long long int count_substrings_optimised(std::string &str, int k)
 {
-    int n = str.length();
+    int n = (int)str.length();
     int res = 0;
     int cnt[26];
     int dist_count = 0;
