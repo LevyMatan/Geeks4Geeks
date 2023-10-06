@@ -151,6 +151,26 @@ def create_header_file(module_name):
     else:
         print('The header file already exists.')
 
+def create_md_file(module_name):
+    '''
+    Creates a MarkDown info file for the module if it does not already exist.
+    '''
+
+    #check if the header file exists in the module directory
+    header_file_name = '../include/' + module_name + '/' + module_name + '.md'
+    module_name_titile = module_name.replace('_', ' ').title()
+    if not os.path.exists(header_file_name):
+        with open(header_file_name, 'w+', encoding='utf-8') as markdown_file:
+            markdown_file.write(f'# {module_name_titile}\n')
+            markdown_file.write('## Problem Statement\n')
+            markdown_file.write('### Example 1\n')
+            markdown_file.write('### Example 2\n')
+            markdown_file.write('## Solution\n')
+            markdown_file.write('### Idea\n')
+            markdown_file.write('### Algorithm\n')
+    else:
+        print('The MarkDown file already exists.')
+
 
 def create_source_file(module_name):
     '''
@@ -214,5 +234,6 @@ if __name__ == '__main__':
 
     make_directories(module_name)
     create_header_file(module_name)
+    create_md_file(module_name)
     create_source_file(module_name)
     create_test_file(module_name)
