@@ -8,18 +8,6 @@
  *
  *
  */
-
-typedef struct Node
-{
-    int data;
-    struct Node *next;
-
-    Node(int x)
-    {
-        data = x;
-        next = nullptr;
-    }
-
-} node_t;
+#include <linked_list/linked_list.h>
 
 void rearrange(struct Node *odd);
