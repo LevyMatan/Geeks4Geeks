@@ -30,10 +30,10 @@ std::vector<int> k_distance_nodes(Node* root, Node* target, int k)
         return result;
     }
     // Check if target node is at distance k from the current node
-    if (k_distance(root, target, k))
-    {
-        result.push_back(root->data);
-    }
+    // if (k_distance(root, target, k))
+    // {
+    //     result.push_back(root->data);
+    // }
     // Recursively check left and right subtrees with reduced value of k
     std::vector<int> left = k_distance_nodes(root->left, target, k - 1);
     std::vector<int> right = k_distance_nodes(root->right, target, k - 1);
