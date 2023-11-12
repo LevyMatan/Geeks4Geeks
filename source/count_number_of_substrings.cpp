@@ -73,39 +73,3 @@ long long int count_substrings(std::string &str, int k)
     }
     return res;
 }
-
-// Using sliding window
-long long int count_substrings_optimised(std::string &str, int k)
-{
-    int n = (int)str.length();
-    int res = 0;
-    int cnt[26];
-    int dist_count = 0;
-    int window_start = 0;
-
-    memset(cnt, 0, sizeof(cnt));
-
-    for (int window_end = 0; window_end < n; window_end++)
-    {
-        if (cnt[str[window_end] - 'a'] == 0)
-        {
-            dist_count++;
-        }
-        cnt[str[window_end] - 'a']++;
-
-        while (dist_count > k)
-        {
-            cnt[str[window_start] - 'a']--;
-            if (cnt[str[window_start] - 'a'] == 0)
-            {
-                dist_count--;
-            }
-            window_start++;
-        }
-        if (dist_count == k)
-        {
-            res++;
-        }
-    }
-    return res;
-}
