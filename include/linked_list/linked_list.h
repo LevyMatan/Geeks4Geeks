@@ -32,6 +32,13 @@ typedef struct Node
 node_t *create_linked_list(int arr[], int n);
 
 /**
+ * @brief Free linked list
+ *
+ * @param head
+ */
+void free_linked_list(node_t *head);
+
+/**
  * @brief Print linked list
  *
  * @param head

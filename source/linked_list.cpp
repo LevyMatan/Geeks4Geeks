@@ -32,6 +32,22 @@ node_t *create_linked_list(int arr[], int n)
 }
 
 /**
+ * @brief Free linked list
+ *
+ * @param head
+ */
+void free_linked_list(node_t *head)
+{
+    node_t *temp = head;
+    while (temp != nullptr)
+    {
+        node_t *next = temp->next;
+        delete temp;
+        temp = next;
+    }
+}
+
+/**
  * @brief Print linked list
  *
  * @param head

@@ -20,4 +20,17 @@ TEST_CASE("Reverse Alternate Nodes in Link List: Toy Example")
     CHECK(root->next->next->next->data == 4);
     CHECK(root->next->next->next->next->data == 2);
     CHECK(root->next->next->next->next->next == nullptr);
+    free_linked_list(root);
+
+    int arr2[] = {1, 2, 3, 4, 5, 6};
+    root = create_linked_list(arr2, 6);
+    rearrange(root);
+    CHECK(root->data == 1);
+    CHECK(root->next->data == 3);
+    CHECK(root->next->next->data == 5);
+    CHECK(root->next->next->next->data == 6);
+    CHECK(root->next->next->next->next->data == 4);
+    CHECK(root->next->next->next->next->next->data == 2);
+    CHECK(root->next->next->next->next->next->next == nullptr);
+    free_linked_list(root);
 }
