@@ -44,3 +44,56 @@ void free_linked_list(node_t *head);
  * @param head
  */
 void print_linked_list(node_t *head);
+
+/**
+ * @brief Add node to the end of the linked list
+ *
+ * @param head
+ * @param data
+ * @return int
+ */
+int push_back(node_t *head, int data);
+
+/**
+ * @brief Add node to the beginning of the linked list
+ *
+ * @param head
+ * @param data
+ * @return int
+ */
+int push_front(node_t **head, int data);
+
+/**
+ * @brief Add node after a given node
+ *
+ * @param prev_node
+ * @param data
+ * @return int
+ */
+int insert_after(node_t *prev_node, int data);
+
+/**
+ * @brief Remove node with given key
+ *
+ * @param head
+ * @param key
+ * @return int
+ */
+int delete_node(node_t **head, int key);
+
+/**
+ * @brief Remove node at given position
+ *
+ * @param head
+ * @param position
+ * @return int
+ */
+int delete_node_at_position(node_t **head, int position);
+
+/**
+ * @brief Get the length of the linked list
+ *
+ * @param head
+ * @return int
+ */
+int get_length(node_t *head);
